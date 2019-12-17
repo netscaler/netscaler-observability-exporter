@@ -2,7 +2,7 @@
 
 This topic provides information on how to deploy Citrix Observability Exporter using Kubernetes YAML files.
 <!---
-You can deploy Citrix Observability Exporter using Kubernetes YAML files or using Helm charts. 
+You can deploy Citrix Observability Exporter using Kubernetes YAML files. 
 -->
 
 Based on your Citrix ADC deployment, you can use Citrix Observability Exporter to export metrics and transactions from Citrix ADC CPX, MPX, or VPX.
