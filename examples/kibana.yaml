@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kibana
+  labels:
+      name: kibana
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:7.4.0
+        env:
+         - name: "ELASTICSEARCH_URL"
+           value: "http://elasticsearch.default.svc.cluster.local:9200"
+        ports:
+        - name: kibana-5601
+          containerPort: 5601
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+spec:
+  type: NodePort
+  ports:
+  - name: kibana-5601
+    port: 5601
+  selector:
+    name: kibana
+---

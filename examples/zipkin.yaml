@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zipkin
+  labels:
+      name: zipkin
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: zipkin
+    spec:
+      containers:
+      - name: zipkin
+        image:  openzipkin/zipkin:2.18.3
+        env:
+         - name: "STORAGE_TYPE"
+           value: "elasticsearch"
+         - name: "ES_HOSTS"
+           value: "http://elasticsearch:9200"
+        ports:
+        - name: zipkin-9411 
+          containerPort: 9411 
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+spec:
+  type: NodePort
+  ports:
+  - name: zipkin-9411
+    port: 9411
+  selector:
+    name: zipkin
+

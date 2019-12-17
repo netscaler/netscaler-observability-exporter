@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  labels:
+      name: elasticsearch
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image:  docker.elastic.co/elasticsearch/elasticsearch:7.4.1
+        env:
+         - name: "discovery.type"
+           value: "single-node"
+        ports:
+        - name: es-9200
+          containerPort: 9200
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+spec:
+  type: NodePort
+  ports:
+  - name: es-9200
+    port: 9200
+  selector:
+    name: elasticsearch
+
+---

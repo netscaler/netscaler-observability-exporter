@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coe-config-tracing
+data:
+  lstreamd_default.conf: |
+    {
+        "RecordType": {
+            "HTTP": "all",
+            "TCP": "all",
+            "SWG": "all",
+            "VPN": "all",
+            "NGS": "all",
+            "ICA": "all",
+            "APPFW": "none",
+            "BOT": "none",
+            "VIDEOOPT": "none",
+            "BURST_CQA": "none",
+            "SLA": "none"
+        },
+        "EnableTracing": "yes",
+        "TracingServer": "zipkin.default.svc.cluster.local:9411/api/v1/spans",
+        "ProcessAlways": "yes",
+        "ProcessorMode": "avro",
+        "SkipAvro": "yes",
+        "FileSizeMax": "40",
+        "ProcessYieldTimeOut": "500",
+        "FileStorageLimit": "1000"
+    }
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coe-tracing
+  labels: 
+    app: coe-tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coe-tracing
+  template:
+    metadata:
+      name: coe-tracing
+      labels:
+        app: coe-tracing
+    spec:
+      containers:
+        - name: coe-tracing
+          image: "quay.io/citrix/citrix-observability-exporter:1.0.001"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5557
+              name: lstream
+          volumeMounts:
+            - name: lstreamd-config-tracing
+              mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
+              subPath: lstreamd_default.conf
+      volumes:
+        - name: lstreamd-config-tracing
+          configMap:
+            name: coe-config-tracing
+---
+# Citrix-observability-exporter headless service  
+apiVersion: v1
+kind: Service
+metadata:
+  name: coe-tracing
+  labels:
+    app: coe-tracing
+spec:
+  clusterIP: None
+  ports:
+    - port: 5557
+      protocol: TCP
+  selector:
+      app: coe-tracing
+---
+# Citrix-observability-exporter NodePort service
+apiVersion: v1
+kind: Service
+metadata:
+  name: coe-tracing-nodeport
+  labels:
+    app: coe-tracing
+spec:
+  type: NodePort
+  ports:
+    - port: 5557
+      protocol: TCP
+  selector: 
+      app: coe-tracing 

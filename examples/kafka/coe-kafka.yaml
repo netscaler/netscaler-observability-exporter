@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coe-config-kafka
+data:
+  lstreamd_default.conf: |
+    {
+        "RecordType": {
+            "HTTP": "all",
+            "TCP": "all",
+            "SWG": "all",
+            "VPN": "all",
+            "NGS": "all",
+            "ICA": "all",
+            "APPFW": "none",
+            "BOT": "none",
+            "VIDEOOPT": "none",
+            "BURST_CQA": "none",
+            "SLA": "none"
+        },
+        "EnableTracing": "no",
+        "ProcessAlways": "yes",
+        "ProcessorMode": "avro",
+        "FileSizeMax": "40",
+        "SkipAvro": "no",
+        "EnableKafka": "yes",
+        "KafkaBroker": "X.X.X.X:9092", 
+        "KafkaTopic": "HTTP",
+        "ProcessYieldTimeOut": "500",
+        "FileStorageLimit": "1000"
+    }
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coe-kafka
+  labels: 
+    app: coe-kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coe-kafka
+  template:
+    metadata:
+      name: coe-kafka
+      labels:
+        app: coe-kafka
+    spec:
+      hostAliases:
+        - ip: "X.X.X.X"
+          hostnames:
+            - "kubernetes-master"
+        - ip: "Y.Y.Y.Y"
+          hostnames:
+            - "kubernetes-slave1"
+        - ip: "Z.Z.Z.Z"
+          hostnames:
+            - "kubernetes-slave2"
+      containers:
+        - name: coe-kafka
+          image: "quay.io/citrix/citrix-observability-exporter:1.0.001"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5557
+              name: lstream
+          volumeMounts:
+            - name: lstreamd-config-kafka
+              mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
+              subPath: lstreamd_default.conf
+      volumes:
+        - name: lstreamd-config-kafka
+          configMap:
+            name: coe-config-kafka
+---
+# Citrix-observability-exporter headless service  
+apiVersion: v1
+kind: Service
+metadata:
+  name: coe-kafka
+  labels:
+    app: coe-kafka
+spec:
+  clusterIP: None
+  ports:
+    - port: 5557
+      protocol: TCP
+  selector:
+      app: coe-kafka
+---
+# Citrix-observability-exporter NodePort service
+apiVersion: v1
+kind: Service
+metadata:
+  name: coe-kafka-nodeport
+  labels:
+    app: coe-kafka
+spec:
+  type: NodePort
+  ports:
+    - port: 5557
+      protocol: TCP
+  selector: 
+      app: coe-kafka 
