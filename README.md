@@ -44,7 +44,7 @@ When Kafka is specified as the transaction endpoint, Citrix Observability Export
 
 ## Deployment
 
-You can deploy Citrix Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix Observability Exporter using Kubernetes YAML, see [Deployment](deployment/README.md).
+You can deploy Citrix Observability Exporter using Kubernetes YAML. To deploy Citrix Observability Exporter using Kubernetes YAML, see [Deployment](deployment/README.md).
 
 ## Questions
 
