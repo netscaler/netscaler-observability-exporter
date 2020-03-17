@@ -8,7 +8,7 @@ site_url:
 # Repository
 repo_name: "Citrix Observability Exporter"
 repo_url: "https://github.com/citrix/citrix-observability-exporter"
-edit_uri: "edit/master/docs"
+edit_uri: "edit/master/docs" 
 
 # Copyright
 copyright: 'Copyright &copy; 1999-2020 Citrix Systems, Inc. All rights reserved. '
