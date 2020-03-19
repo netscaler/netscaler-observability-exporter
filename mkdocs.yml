@@ -1,9 +1,9 @@
 # Project information
 site_name: Citrix Observability Exporter
 site_title: Developer Docs
-site_description: Citrix Observability Exporter is a container which collects metrics and transactions from Citrix ADCs and exports them to endpoints like Zipkin, Kafka, and Elasticsearch.
+site_description: Documentation for Citrix Observability Exporter
 site_author:
-site_url: 
+site_url: https://developer-docs.citrix.com/
 
 # Repository
 repo_name: "Citrix Observability Exporter"
@@ -19,7 +19,7 @@ extra_css:
 # Configuration
 theme:
   name: null
-  custom_dir: material
+  custom_dir: devdocs-theme
 
   # 404 page
   static_templates:
@@ -37,7 +37,7 @@ theme:
     primary: white
     accent: blue
   font: false
-  favicon: /media/favicon.ico
+  favicon: https://www.citrix.com/favicon.ico
   logo: https://developer-docs.citrix.com/_static/Citrix_Logo_Black.png
 
 # Customization
@@ -66,8 +66,4 @@ nav:
   - Overview: index.md
   - Release notes: https://github.com/citrix/citrix-observability-exporter/releases
   - Deploy Citrix Observability Exporter: deploy-coe.md
-  
-google_analytics:
-  - 'UA-59929653-12'
-  - 'auto'
   
