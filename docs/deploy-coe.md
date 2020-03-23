@@ -11,7 +11,6 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 
 ![Citrix Observability Exporter](./media/citrix-observability-exporter-deploy.png)
 
-
 ## Prerequisites
 
  - Ensure that you have a Kubernetes cluster with  `kube-dns` addon enabled.
@@ -21,7 +20,7 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
     - (Optional) [Elasticsearch](https://www.elastic.co/products/elasticsearch) as back-end for Zipkin. Elasticsearch is required if you want to visualize your tracing data in [Kibana](https://www.elastic.co/products/kibana). You can also use Elasticsearch as an endpoint for transactions.
     - (Optional) [Kibana](https://www.elastic.co/products/kibana) is required to visualize your tracing data.
 
-**Note:**
+    **Note:**
     You can use [zipkin.yaml](../examples/zipkin.yaml), [elasticsearch.yaml](../examples/elasticsearch.yaml), and [kibana.yaml](../examples/kibana.yaml) for installing Zipkin, Elasticsearch, and Kibana.
 
 - If Elasticsearch is used as the endpoint for transactions, ensure that you have Elasticsearch installed and configured.
@@ -38,33 +37,34 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
 2. If you use Citrix ADC VPX or MPX in the deployment, create the necessary login credentials.
 
         kubectl create secret  generic nslogin --from-literal=username='nsroot' --from-literal=password='nsroot'
+
 3. Create a Kubernetes ConfigMap, Deployment, and Service with Log stream configuration for the required endpoint:
 
-- For Citrix Observability Exporter with Zipkin tracing support:
+   - For Citrix Observability Exporter with Zipkin tracing support:
 
-   Deploy Citrix Observability Exporter using the [coe-tracing.yaml](coe-tracing.yaml) file.
+     Deploy Citrix Observability Exporter using the [coe-tracing.yaml](coe-tracing.yaml) file.
 
 
-        kubectl create -f  coe-tracing.yaml
+         kubectl create -f  coe-tracing.yaml
 
-   Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
-You can specify the tracing server in ConfigMap using environment variables in two ways:
+     Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
+     You can specify the tracing server in ConfigMap using environment variables in two ways:
 
-   - Specify the IP address or DNS name of the tracing server (Zipkin):
+     - Specify the IP address or DNS name of the tracing server (Zipkin):
 
                 TRACING_SERVER=<ip-address> or <dns-name>
 
-   If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
+       If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
 
-  - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
+     - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
        
                 TRACING_SERVER=<ip-address>:<port>/api/v1/spans
 
 - For Citrix Observability Exporter with Elasticsearch as the endpoint:
 
-   Deploy Citrix Observability Exporter using the [coe-es.yaml](coe-es.yaml) file.
+     Deploy Citrix Observability Exporter using the [coe-es.yaml](coe-es.yaml) file.
    
-        kubectl create -f coe-es.yaml
+      kubectl create -f coe-es.yaml
 
      Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
 
@@ -72,11 +72,11 @@ You can specify the tracing server in ConfigMap using environment variables in t
 
    Deploy Citrix Observability Exporter using the [coe-kafka.yaml](coe-kafka.yaml) file
    
-        kubectl create -f coe-kafka.yaml
+      kubectl create -f coe-kafka.yaml
 
    Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
 
-**Note:**
+   **Note:**
    Once you deploy a Citrix Observability Exporter instance with a specific endpoint, you cannot modify it. For changing the endpoint, you must bring down the Citrix Observability Exporter instance and deploy it again with the new endpoint.
 
 ## Configure Citrix Observability Exporter support on Citrix ADC
@@ -101,16 +101,21 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
     - For Kafka as the transaction endpoint: [cpx-ingress-kafka.yaml](../examples/kafka/cpx-ingress-kafka.yaml)
 
 2. Edit the YAML file and specify the environment variables in the Citrix ingress controller configuration according to the endpoint you are using:
+
     - For tracing support with Zipkin:
   
                 -name: "NS_LOGPROXY"
                  value: "<abc.com>"
                 -name: "NS_DISTRIBUTED_TRACING"
                  value: "yes"
+
+
     - For Elasticsearch or Kafka as the transaction endpoint:
+  
 
                 - name: "NS_LOGPROXY"
                  value: "<abc.com>"
+        
         
         **Note:**
         Using [smart annotations](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/configure/annotations/), you can define specific parameters you must import by specifying it in the YAML file for deploying Citrix ADC CPX.
@@ -121,6 +126,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
                 ingress.citrix.com/analyticsprofile: '{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED", "httphost":"ENABLED", "httpmethod":"ENABLED", "httpcontenttype":"ENABLED"}, "tcpinsight": {"tcpBurstReporting":"DISABLED"}}'
   
 
+        
         **Note:**
         You can also define the parameters to import using smart annotations for service. You can specify the parameters in the YAML for deploying Citrix Observability Exporter. However, you can use service annotations only when the service type is `LoadBalancer`.
 
@@ -134,10 +140,12 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
     - For tracing support with Zipkin:
 
                 kubectl create -f cpx-ingress-tracing.yaml 
+    
     - For Elasticsearch as the transaction endpoint:
         
                  kubectl create -f cpx-ingress-es.yaml 
-     - For Kafka as the transaction endpoint:
+    
+    - For Kafka as the transaction endpoint:
 
                  kubectl create -f cpx-ingress-kafka.yaml 
 
@@ -150,6 +158,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 You need to complete the [prerequisites](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#prerequisites) for deploying the Citrix ingress controller as a standalone pod.
 
 1. Download the [vpx-ingress.yaml](../examples/vpx-ingress.yaml) file.
+
 2. Edit the `vpx-ingress.yaml` file and modify the values for the environmental variables as provided in [deploying the Citrix ingress controller](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#deploy-citrix-ingress-controller-as-a-pod).
 
 3. Specify environment variables for Citrix Observability Exporter in the Citrix ingress controller configuration.
@@ -162,7 +171,9 @@ You need to complete the [prerequisites](https://developer-docs.citrix.com/proje
                 - name: "NS_DISTRIBUTED_TRACING"
                   value: "yes"
 
+
    - For ElasticSearch or Kafka as the transaction endpoint:
+  
 
                 - name: "NS_LOGPROXY"
                   value: "<abc.com>:5557"
@@ -192,11 +203,11 @@ file. This file includes the deployment, service, and Ingress.
    
         http://<ip-address>:9411/
 
- You can see the traces as shown in the following image.
+    You can see the traces as shown in the following image.
 
- ![Zipkin](./media/zipkin-ui.png)
+    ![Zipkin](./media/zipkin-ui.png)
 
-This image shows a trace created for a request in Zipkin. You can see that multiple microservices are invoked to serve a single request and spans for each microservice is created. The time taken to process a request on each microservice is displayed. Spans starting with `k8s_*` are created for Citrix ADC CPX and other spans are for back end web servers.
+    This image shows a trace created for a request in Zipkin. You can see that multiple microservices are invoked to serve a single request and spans for each microservice is created. The time taken to process a request on each microservice is displayed. Spans starting with `k8s_*` are created for Citrix ADC CPX and other spans are for back end web servers.
 
 ### Verify Citrix Observability Exporter transaction support
 
@@ -218,9 +229,11 @@ file. This sample web application is added as a service in the Ingress.
 
         www.samplewebserver.com ip-address
 
+
 1. Get `NodePort` information for `cpx-service` using the following command.
 
         kubectl describe service cpx-service
+
 2. Access `http://www.samplewebserver.com:NodePort` from a web browser to open the sample web application.
 
 3.  Send multiple requests to the application as shown in the following sample image.
@@ -239,4 +252,3 @@ file. This sample web application is added as a service in the Ingress.
    **Note:**
    You can import the Kibana dashboard template from [dashboards](./dashboards/KibanaAppTrans.ndjson).
    Before importing the Kibana dashboard, you must define an index pattern named `*http*` using the information in the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/tutorial-define-index.html).
-
