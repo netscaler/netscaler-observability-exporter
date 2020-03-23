@@ -42,39 +42,40 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
 
    - For Citrix Observability Exporter with Zipkin tracing support:
 
-     Deploy Citrix Observability Exporter using the [coe-tracing.yaml](coe-tracing.yaml) file.
+      Deploy Citrix Observability Exporter using the [coe-tracing.yaml](../examples/tracing/coe-tracing.yaml) file.
 
 
-         kubectl create -f  coe-tracing.yaml
+          kubectl create -f  coe-tracing.yaml
 
-     Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
-     You can specify the tracing server in ConfigMap using environment variables in two ways:
+      Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
+     
+      You can specify the tracing server in ConfigMap using environment variables in two ways:
 
-     - Specify the IP address or DNS name of the tracing server (Zipkin):
+      - Specify the IP address or DNS name of the tracing server (Zipkin):
 
-                TRACING_SERVER=<ip-address> or <dns-name>
+            TRACING_SERVER= <ip-address> or <dns-name>
 
-       If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
+        If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
 
-     - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
+      - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
        
-                TRACING_SERVER=<ip-address>:<port>/api/v1/spans
+            TRACING_SERVER=<ip-address>:<port>/api/v1/spans
 
-- For Citrix Observability Exporter with Elasticsearch as the endpoint:
+  - For Citrix Observability Exporter with Elasticsearch as the endpoint:
 
-     Deploy Citrix Observability Exporter using the [coe-es.yaml](coe-es.yaml) file.
+     Deploy Citrix Observability Exporter using the [coe-es.yaml](../examples/elasticsearch/coe-es.yaml) file.
    
-      kubectl create -f coe-es.yaml
+        kubectl create -f coe-es.yaml
 
      Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
 
-- For Citrix Observability Exporter with Kafka as the endpoint:
+  - For Citrix Observability Exporter with Kafka as the endpoint:
 
-   Deploy Citrix Observability Exporter using the [coe-kafka.yaml](coe-kafka.yaml) file
+     Deploy Citrix Observability Exporter using the [coe-kafka.yaml](../examples/kafka/coe-kafka.yaml) file
    
-      kubectl create -f coe-kafka.yaml
+        kubectl create -f coe-kafka.yaml
 
-   Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
+     Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
 
    **Note:**
    Once you deploy a Citrix Observability Exporter instance with a specific endpoint, you cannot modify it. For changing the endpoint, you must bring down the Citrix Observability Exporter instance and deploy it again with the new endpoint.
@@ -139,7 +140,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 
     - For tracing support with Zipkin:
 
-                kubectl create -f cpx-ingress-tracing.yaml 
+                 kubectl create -f cpx-ingress-tracing.yaml 
     
     - For Elasticsearch as the transaction endpoint:
         
@@ -155,7 +156,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 
  Perform the following steps to deploy the Citrix ingress controller as a pod in the Kubernetes cluster with Citrix Observability Exporter support enabled.
 
-You need to complete the [prerequisites](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#prerequisites) for deploying the Citrix ingress controller as a standalone pod.
+ You need to complete the [prerequisites](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#prerequisites) for deploying the Citrix ingress controller as a standalone pod.
 
 1. Download the [vpx-ingress.yaml](../examples/vpx-ingress.yaml) file.
 
@@ -216,6 +217,7 @@ This example shows how to verify a Citrix Observability Exporter deployment with
 You must complete the following steps before performing the steps in this example:
 
 - Deploy Citrix Observability Exporter with Elasticsearch as the transaction endpoint.
+  
 - Deploy Citrix ADC CPX with Citrix Observability Exporter support enabled
 
 Once you deploy Citrix Observability Exporter and Citrix ADC CPX perform the following steps:
