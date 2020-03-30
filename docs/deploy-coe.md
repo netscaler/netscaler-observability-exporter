@@ -61,7 +61,7 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
        
             TRACING_SERVER=<ip-address>:<port>/api/v1/spans
 
-    - For Citrix Observability Exporter with Elasticsearch as the endpoint:
+   - For Citrix Observability Exporter with Elasticsearch as the endpoint:
 
         Deploy Citrix Observability Exporter using the [coe-es.yaml](../examples/elasticsearch/coe-es.yaml) file.
 
