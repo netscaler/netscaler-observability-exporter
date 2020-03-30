@@ -61,21 +61,22 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
        
             TRACING_SERVER=<ip-address>:<port>/api/v1/spans
 
-  - For Citrix Observability Exporter with Elasticsearch as the endpoint:
+    - For Citrix Observability Exporter with Elasticsearch as the endpoint:
 
-     Deploy Citrix Observability Exporter using the [coe-es.yaml](../examples/elasticsearch/coe-es.yaml) file.
+        Deploy Citrix Observability Exporter using the [coe-es.yaml](../examples/elasticsearch/coe-es.yaml) file.
+
    
-        kubectl create -f coe-es.yaml
+           kubectl create -f coe-es.yaml
 
-     Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
+      Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
 
-  - For Citrix Observability Exporter with Kafka as the endpoint:
+    - For Citrix Observability Exporter with Kafka as the endpoint:
 
-     Deploy Citrix Observability Exporter using the [coe-kafka.yaml](../examples/kafka/coe-kafka.yaml) file
+       Deploy Citrix Observability Exporter using the [coe-kafka.yaml](../examples/kafka/coe-kafka.yaml) file.
    
-        kubectl create -f coe-kafka.yaml
+           kubectl create -f coe-kafka.yaml
 
-     Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
+      Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
 
    **Note:**
    Once you deploy a Citrix Observability Exporter instance with a specific endpoint, you cannot modify it. For changing the endpoint, you must bring down the Citrix Observability Exporter instance and deploy it again with the new endpoint.
@@ -116,8 +117,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 
                 - name: "NS_LOGPROXY"
                  value: "<abc.com>"
-        
-        
+
         **Note:**
         Using [smart annotations](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/configure/annotations/), you can define specific parameters you must import by specifying it in the YAML file for deploying Citrix ADC CPX.
 
@@ -238,7 +238,7 @@ file. This sample web application is added as a service in the Ingress.
 
 2. Access `http://www.samplewebserver.com:NodePort` from a web browser to open the sample web application.
 
-3.  Send multiple requests to the application as shown in the following sample image.
+3. Send multiple requests to the application as shown in the following sample image.
 
     ![sample-request](./media/sample-request-web-application.png)
 
