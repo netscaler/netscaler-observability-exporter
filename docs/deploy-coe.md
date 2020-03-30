@@ -40,41 +40,44 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
 
 3. Create a Kubernetes ConfigMap, Deployment, and Service with Log stream configuration for the required endpoint:
 
-   - For Citrix Observability Exporter with Zipkin tracing support:
+    - For Citrix Observability Exporter with Zipkin tracing support:
 
-      Deploy Citrix Observability Exporter using the [coe-tracing.yaml](../examples/tracing/coe-tracing.yaml) file.
+       Deploy Citrix Observability Exporter using the [coe-tracing.yaml](../examples/tracing/coe-tracing.yaml) file.
 
 
-          kubectl create -f  coe-tracing.yaml
+            kubectl create -f  coe-tracing.yaml
 
-      Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
+       Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
      
-      You can specify the tracing server in ConfigMap using environment variables in two ways:
+       You can specify the tracing server in ConfigMap using environment variables in two ways:
 
-      - Specify the IP address or DNS name of the tracing server (Zipkin):
+       - Specify the IP address or DNS name of the tracing server (Zipkin):
+  
 
-            TRACING_SERVER= <ip-address> or <dns-name>
+              TRACING_SERVER= <ip-address> or <dns-name>
 
-        If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
+         If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
 
-      - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
+        - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
        
-            TRACING_SERVER=<ip-address>:<port>/api/v1/spans
+              TRACING_SERVER=<ip-address>:<port>/api/v1/spans
 
-   - For Citrix Observability Exporter with Elasticsearch as the endpoint:
+     - For Citrix Observability Exporter with Elasticsearch as  the endpoint:
 
-        Deploy Citrix Observability Exporter using the [coe-es.yaml](../examples/elasticsearch/coe-es.yaml) file.
+         Deploy Citrix Observability Exporter using the [coe-es.yaml](../examples/elasticsearch/coe-es.yaml) file.
+
 
    
-           kubectl create -f coe-es.yaml
+            kubectl create -f coe-es.yaml
 
-      Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
+        Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
 
-    - For Citrix Observability Exporter with Kafka as the endpoint:
+     - For Citrix Observability Exporter with Kafka as the endpoint:
 
-       Deploy Citrix Observability Exporter using the [coe-kafka.yaml](../examples/kafka/coe-kafka.yaml) file.
+         Deploy Citrix Observability Exporter using the [coe-kafka.yaml](../examples/kafka/coe-kafka.yaml) file.
+
    
-           kubectl create -f coe-kafka.yaml
+             kubectl create -f coe-kafka.yaml
 
       Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
 
