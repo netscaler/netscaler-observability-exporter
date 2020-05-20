@@ -100,10 +100,6 @@ spec:
             value: "SIDECAR"
           - name: "NS_ENABLE_MONITORING"
             value: "YES"
-          - name: "NS_DISTRIBUTED_TRACING"
-            value: "yes"
-          - name: "NS_LOGPROXY"
-            value: "coe-tracing.default.svc.cluster.local"
           - name: POD_NAME
             valueFrom:
               fieldRef:
@@ -115,6 +111,8 @@ spec:
                 apiVersion: v1
                 fieldPath: metadata.namespace
           args:
+            - --configmap
+               default/cic-configmap
             - --ingress-classes
               watches-ingress
           imagePullPolicy: Always

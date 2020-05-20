@@ -60,7 +60,7 @@ spec:
             - "kubernetes-slave2"
       containers:
         - name: coe-kafka
-          image: "quay.io/citrix/citrix-observability-exporter:1.0.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.1.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557

@@ -12,22 +12,20 @@ data:
             "VPN": "all",
             "NGS": "all",
             "ICA": "all",
-            "APPFW": "none",
+            "APPFW": "all",
             "BOT": "none",
             "VIDEOOPT": "none",
             "BURST_CQA": "none",
             "SLA": "none"
         },
-        "EnableTracing": "yes",
-        "TracingServer": "zipkin.default.svc.cluster.local:9411/api/v1/spans",
-        "ProcessAlways": "yes",
+        "EnableTracing": "no",
+        "ProcessAlways": "no",
         "ProcessorMode": "json",
         "FileSizeMax": "40",
         "ElkServer": "elasticsearch.default.svc.cluster.local:9200",
         "ElkMaxConnections": "512",
         "ElkMaxSendBuffersPerSec": "128",
         "ElkBufferingLimit": "1024*1024",
-        "ElkFileDump": "no",
         "SkipAvro": "yes",
         "ProcessYieldTimeOut": "500",
         "FileStorageLimit": "1000"
@@ -53,7 +51,7 @@ spec:
     spec:
       containers:
         - name: coe-es
-          image: "quay.io/citrix/citrix-observability-exporter:1.1.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.0.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
@@ -95,4 +93,4 @@ spec:
     - port: 5557
       protocol: TCP
   selector: 
-      app: coe-es
+      app: coe-es 

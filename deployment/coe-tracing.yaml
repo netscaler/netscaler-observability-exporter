@@ -45,10 +45,13 @@ spec:
       name: coe-tracing
       labels:
         app: coe-tracing
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5563"
     spec:
       containers:
         - name: coe-tracing
-          image: "quay.io/citrix/citrix-observability-exporter:1.0.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.1.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
@@ -73,6 +76,7 @@ spec:
   clusterIP: None
   ports:
     - port: 5557
+      name: lstreamd
       protocol: TCP
   selector:
       app: coe-tracing
@@ -88,6 +92,7 @@ spec:
   type: NodePort
   ports:
     - port: 5557
+      name: lstreamd-nodeport
       protocol: TCP
-  selector: 
-      app: coe-tracing 
+  selector:
+    app: coe-tracing

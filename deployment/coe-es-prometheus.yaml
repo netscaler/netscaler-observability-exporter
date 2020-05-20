@@ -50,6 +50,9 @@ spec:
       name: coe-es
       labels:
         app: coe-es
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5563"
     spec:
       containers:
         - name: coe-es
@@ -58,6 +61,8 @@ spec:
           ports:
             - containerPort: 5557
               name: lstream
+            - containerPort: 5563
+              name: rest
           volumeMounts:
             - name: lstreamd-config-es
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
@@ -79,6 +84,10 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
   selector:
       app: coe-es
 ---
@@ -94,5 +103,9 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
   selector: 
       app: coe-es

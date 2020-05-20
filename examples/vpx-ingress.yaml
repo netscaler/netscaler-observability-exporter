@@ -87,13 +87,9 @@ spec:
          # Set log level
          - name: "EULA"
            value: "yes"
-         # Configure Citrix-observability-exporter endpoint, provide the NodePort Service IP:Port
-         - name: "NS_LOGPROXY"
-           value: "X.X.X.X:PPPP" # KubeNodeIP:NodePort 
-         # Enable tracing on the Citrix ADC
-         - name: "NS_DISTRIBUTED_TRACING"
-           value: "yes"
         args:
+          - --configmap
+               default/cic-configmap
           - --ingress-classes
             watches-ingress
           - --feature-node-watch

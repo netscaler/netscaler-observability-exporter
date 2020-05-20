@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cic-configmap
+  namespace: default
+data:
+   LOGLEVEL: 'debug'
+   NS_PROTOCOL: 'http'
+   NS_PORT: '80'
+   NS_HTTP2_SERVER_SIDE: 'ON'
+   NS_COE_CONFIG: |
+     distributed_tracing:
+       enable: 'false'
+       samplingrate: 100
+     coe_server:
+       server: 'X.X.X.X'
+     timeseries: 
+       port: 5563 
+       secure: 'false'
+       metrics:
+         enable: 'false'
+         mode: 'avro' 
+       auditlogs:
+         enable: 'false'
+       events: 
+         enable: 'false'
+     transactions:
+       enable: 'true'
+       port: 5557 
+       secure: 'false'
