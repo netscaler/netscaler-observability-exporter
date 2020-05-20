@@ -45,9 +45,6 @@ spec:
       name: coe-tracing
       labels:
         app: coe-tracing
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "5563"
     spec:
       containers:
         - name: coe-tracing

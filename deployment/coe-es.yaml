@@ -27,7 +27,7 @@ data:
         "ElkMaxConnections": "512",
         "ElkMaxSendBuffersPerSec": "128",
         "ElkBufferingLimit": "1024*1024",
-        "ElkFileDump": "no",
+        "ELKFileDump": "no",
         "SkipAvro": "yes",
         "ProcessYieldTimeOut": "500",
         "FileStorageLimit": "1000"
