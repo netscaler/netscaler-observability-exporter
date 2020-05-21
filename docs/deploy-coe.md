@@ -13,7 +13,7 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 
 ## Prerequisites
 
- - Ensure that you have a Kubernetes cluster with  `kube-dns` addon enabled.
+ - Ensure that you have a Kubernetes cluster with  `kube-dns` or `CoreDNS`.
  - If Zipkin is used as the distributed tracer,
    ensure that you have the following docker images installed in the Kubernetes cluster:
     - [Zipkin](https://zipkin.io/)
@@ -25,6 +25,7 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 
 - If Elasticsearch is used as the endpoint for transactions, ensure that you have Elasticsearch installed and configured.
 - If Kafka is used as the endpoint for transactions, ensure that Kafka server is installed and configured.
+- If Prometheus is used as the endpoint for time series data, ensure that Prometheus is installed and configured.
 
 ## Deploy Citrix Observability Exporter using YAML
 
@@ -82,8 +83,21 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
 
         
          Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
+    
+    - For Citrix Observability Exporter with Prometheus as the endpoint for time series data:
 
-   **Note:**
+        You can enable Prometheus support by specifying the following annotations in the YAML files to deploy Zipkin, Kafka, or Elasticsearch and exposing the time series port.
+
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "5563"
+
+        The following command deploys Citrix Observability Exporter with both Elasticsearch and Prometheus as endpoints, using the [coe-es-prometheus.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/deployment/coe-es-prometheus.yaml) file. In this YAML file, annotations for Prometheus support are enabled and port 5563 is exposed which is used for the time series data.
+
+            kubectl create -f coe-es-prometheus.yaml
+
+        You should configure Prometheus to scrape the data from the Citrix Observability Exporter time series port. For enabling time series data processing, there is no specific configuration required on Citrix Observability Exporter. By default, if time series data is pushed to Citrix Observability Exporter, it is processed automatically. The time series port is enabled by default.
+   
+  **Note:**
    Once you deploy a Citrix Observability Exporter instance with a specific endpoint, you cannot modify it. For changing the endpoint, you must bring down the Citrix Observability Exporter instance and deploy it again with the new endpoint.
 
 ## Configure Citrix Observability Exporter support on Citrix ADC
@@ -96,9 +110,6 @@ In this procedure, a Citrix ADC CPX is deployed with the Citrix ingress controll
 
 Depending on the endpoint you are using, you can choose the YAML file for deploying Citrix ADC CPX. These YAML files include the configuration required for Citrix Observability Exporter.
 
-**Note:**
-  Any usage of the environment variable ``NS_LOGPROXY`` in this procedure refers to ``Citrix Observability Exporter`` only.
-
 Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Observability Exporter support enabled.
 
 1. Download the YAML file for deploying Citrix ADC CPX according to the endpoint.
@@ -107,53 +118,41 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
     - For Elasticsearch as the transaction endpoint: [cpx-ingress-es.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/elasticsearch/cpx-ingress-es.yaml)
     - For Kafka as the transaction endpoint: [cpx-ingress-kafka.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/kafka/cpx-ingress-kafka.yaml)
 
-2. Edit the YAML file and specify the environment variables in the Citrix ingress controller configuration according to the endpoint you are using:
+2. Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/cic-configmap.yaml) file.
+
+             kubectl create -f cic-configmap.yaml
+
+3. Deploy Citrix ADC CPX with the Citrix ingress controller as a sidecar using the following command.
 
     - For tracing support with Zipkin:
-  
-                -name: "NS_LOGPROXY"
-                 value: "<abc.com>"
-                -name: "NS_DISTRIBUTED_TRACING"
-                 value: "yes"
 
+                kubectl create -f cpx-ingress-tracing.yaml 
+    
+    - For Elasticsearch as the transaction endpoint:
+        
+                kubectl create -f cpx-ingress-es.yaml 
+    
+    - For Kafka as the transaction endpoint:
 
-    - For Elasticsearch or Kafka as the transaction endpoint:
-  
+                kubectl create -f cpx-ingress-kafka.yaml 
 
-                - name: "NS_LOGPROXY"
-                 value: "<abc.com>"
-
-        **Note:**
+       **Note:**
         Using [smart annotations](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/configure/annotations/), you can define specific parameters you must import by specifying it in the YAML file for deploying Citrix ADC CPX.
 
         For example:
+
 
         
                 ingress.citrix.com/analyticsprofile: '{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED", "httphost":"ENABLED", "httpmethod":"ENABLED", "httpcontenttype":"ENABLED"}, "tcpinsight": {"tcpBurstReporting":"DISABLED"}}'
   
 
         
-        **Note:**
-        You can also define the parameters to import using smart annotations for service. You can specify the parameters in the YAML for deploying Citrix Observability Exporter. However, you can use service annotations only when the service type is `LoadBalancer`.
+       **Note:** You can also define the parameters to import using smart annotations for service. You can specify the parameters in the YAML for deploying Citrix Observability Exporter. However, you can use service annotations only when the service type is `LoadBalancer`.
 
         For example:
         
                 service.citrix.com/analyticsprofile: '{"<service name>":'{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED"}
-        
 
-3. Deploy Citrix ADC CPX with the Citrix ingress controller as a sidecar using the following command.
-
-    - For tracing support with Zipkin:
-
-                 kubectl create -f cpx-ingress-tracing.yaml 
-    
-    - For Elasticsearch as the transaction endpoint:
-        
-                 kubectl create -f cpx-ingress-es.yaml 
-    
-    - For Kafka as the transaction endpoint:
-
-                 kubectl create -f cpx-ingress-kafka.yaml 
 
 ### Deploy the Citrix ingress controller with Citrix Observability Exporter support for Citrix ADC MPX or VPX
 
@@ -165,28 +164,13 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 
 1. Download the [vpx-ingress.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/vpx-ingress.yaml) file.
 
-2. Edit the `vpx-ingress.yaml` file and modify the values for the environmental variables as provided in [deploying the Citrix ingress controller](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#deploy-citrix-ingress-controller-as-a-pod).
+2. Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/cic-configmap.yaml) file.
 
-3. Specify environment variables for Citrix Observability Exporter in the Citrix ingress controller configuration.
+             kubectl create -f cic-configmap.yaml
 
-    - For tracing support with Zipkin:
-  
+3. Deploy the [vpx-ingress.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/vpx-ingress.yaml) file using the following command.
 
-                - name: "NS_LOGPROXY"
-                  value: "<abc.com>"
-                - name: "NS_DISTRIBUTED_TRACING"
-                  value: "yes"
-
-
-    - For ElasticSearch or Kafka as the transaction endpoint:
-  
-
-                - name: "NS_LOGPROXY"
-                  value: "<abc.com>:5557"
-
-4. Once you update the environment variables, save the [vpx-ingress.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/vpx-ingress.yaml) file and deploy it using the following command.
-
-        kubectl create -f vpx-ingress.yaml -n tracing
+             kubectl create -f vpx-ingress.yaml -n tracing
 
 ## Deploy sample applications
 
@@ -259,3 +243,12 @@ file. This sample web application is added as a service in the Ingress.
    **Note:**
    You can import the Kibana dashboard template from [dashboards](https://github.com/citrix/citrix-observability-exporter/blob/master/dashboards/KibanaAppTrans.ndjson).
    Before importing the Kibana dashboard, you must define an index pattern named `*http*` using the information in the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/tutorial-define-index.html).
+
+### Sample Grafana dashboard for Prometheus
+
+Following is a sample Grafana dashboard which visualizes time series data from Prometheus. Kafka is used as the transaction endpoint.
+
+ ![Grafana-dashboard](../media/COE-GrafanaDashboard.png)
+
+  **Note:**
+   You can import the Grafana dashboard template from [dashboards](https://github.com/citrix/citrix-observability-exporter/tree/master/dashboards).

@@ -14,7 +14,7 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 
 ## Prerequisites
 
- - Ensure that you have a Kubernetes cluster with  `kube-dns` addon enabled.
+ - Ensure that you have a Kubernetes cluster with  `kube-dns` or `CoreDNS`.
  - If Zipkin is used as the distributed tracer,
    ensure that you have the following docker images installed in the Kubernetes cluster:
     - [Zipkin](https://zipkin.io/)

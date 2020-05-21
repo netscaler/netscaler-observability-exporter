@@ -9,6 +9,7 @@
  - [Zipkin](https://zipkin.io/)
  - [Kafka](https://kafka.apache.org/)
  - [Elasticsearch](https://www.elastic.co/products/elasticsearch)
+ - [Prometheus](https://prometheus.io/docs/introduction/overview/)
 
 ## Overview
 
@@ -26,6 +27,11 @@ Currently, you can monitor performance at the application level using Citrix ADC
 
 Citrix Observability Exporter supports collecting transactions and streaming them to endpoints. Currently, Citrix Observability Exporter supports Elasticsearch and Kafka as transaction endpoints.
 
+### Time series data support
+
+Citrix Observability Exporter supports collecting time series data (metrics) from Citrix ADC instances and exports them to Prometheus. Prometheus is a monitoring solution for storing time series data like metrics. You can then add Prometheus as a data source to Grafana and graphically view the Citrix ADC metrics and analyze the metrics.
+
+
 ## How does Citrix Observability Exporter work
 
 ### Distributed tracing with Zipkin using Citrix Observability Exporter
@@ -41,6 +47,10 @@ When Elasticsearch is specified as the transaction endpoint, Citrix Observabilit
 ### Citrix Observability Exporter with Kafka as the transaction endpoint
 
 When Kafka is specified as the transaction endpoint, Citrix Observability Exporter converts the transaction data to [Avro](http://avro.apache.org/docs/current/Avro) format and streams them to Kafka.
+
+### Citrix Observability Exporter with Prometheus as the endpoint for time series data
+
+When Prometheus is specified as the format for time series data, Citrix Observability Exporter collects various metrics from Citrix ADCs and converts them to appropriate Prometheus format and exports them to the Prometheus server. These metrics include counters of the virtual servers, services to which the analytics profile is bound and global counters of HTTP, TCP and so on.
 
 ## Deployment
 
