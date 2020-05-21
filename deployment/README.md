@@ -1,6 +1,7 @@
 # Deploy Citrix Observability Exporter
 
 This topic provides information on how to deploy Citrix Observability Exporter using Kubernetes YAML files.
+To deploy Citrix Observability Exporter using Helm charts, see [Deploy using Helm charts](https://github.com/citrix/citrix-helm-charts/tree/master/citrix-observability-exporter).
 <!---
 You can deploy Citrix Observability Exporter using Kubernetes YAML files or using Helm charts. 
 -->

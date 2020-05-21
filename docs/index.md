@@ -54,5 +54,11 @@ When Prometheus is specified as the format for time series data, Citrix Observab
 
 ## Deployment
 
-You can deploy Citrix Observability Exporter using Kubernetes YAML. To deploy Citrix Observability Exporter using Kubernetes YAML, see [Deployment](deploy-coe.md).
+You can deploy Citrix Observability Exporter using Kubernetes YAML. To deploy Citrix Observability Exporter using Kubernetes YAML, see [Deployment](deploy-coe.md). To deploy Citrix Observability Exporter using Helm charts, see [Deploy using Helm charts](https://github.com/citrix/citrix-helm-charts/tree/master/citrix-observability-exporter).
 
+## Features
+
+### Custom header logging
+
+Custom header logging enables logging of all HTTP headers of a transaction and currently supported on the Kafka endpoint.
+For more information, see [Custom header logging](https://github.com/citrix/citrix-observability-exporter/tree/master/custom-header).
