@@ -75,7 +75,7 @@ spec:
       serviceAccountName: cpx-ingress-k8s-role
       containers:
         - name: cpx-ingress-kafka
-          image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-47.22"
+          image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-52.24"
           securityContext:
              privileged: true
           env:
@@ -86,7 +86,7 @@ spec:
           imagePullPolicy: Always
         # Add cic as a sidecar
         - name: cic
-          image: "quay.io/citrix/citrix-k8s-ingress-controller:1.5.6"
+          image: "quay.io/citrix/citrix-k8s-ingress-controller:1.8.19"
           env:
           - name: "EULA"
             value: "yes"
