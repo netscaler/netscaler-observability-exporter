@@ -8,15 +8,14 @@ data:
    NS_PROTOCOL: 'http'
    NS_PORT: '80'
    NS_HTTP2_SERVER_SIDE: 'ON'
-   NS_COE_CONFIG: |
+   NS_ANALYTICS_CONFIG: |
      distributed_tracing:
        enable: 'false'
        samplingrate: 100
-     coe_server:
+     endpoint:
        server: 'coe-es.default.svc.cluster.local'
      timeseries: 
        port: 5563 
-       secure: 'false'
        metrics:
          enable: 'true'
          mode: 'prometheus' 
@@ -27,4 +26,3 @@ data:
      transactions:
        enable: 'true'
        port: 5557 
-       secure: 'false'
