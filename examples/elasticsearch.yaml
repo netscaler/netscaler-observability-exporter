@@ -1,15 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elasticsearch
-  labels:
-      name: elasticsearch
 spec:
+  selector:
+    matchLabels: 
+      app: elasticsearch
   replicas: 1
   template:
     metadata:
+      name: elasticsearch
       labels:
-        name: elasticsearch
+        app: elasticsearch
     spec:
       containers:
       - name: elasticsearch
@@ -26,12 +28,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: elasticsearch
+  labels:
+    app: elasticsearch
 spec:
   type: NodePort
   ports:
   - name: es-9200
     port: 9200
   selector:
-    name: elasticsearch
+    app: elasticsearch
 
 ---
