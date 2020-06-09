@@ -1,19 +1,22 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webserver
-  labels:
-      name: webserver
 spec:
+  selector:
+    matchLabels:
+      app: webserver
   replicas: 1
   template:
     metadata:
+      name: webserver
       labels:
-        name: webserver
+        app: webserver
     spec:
       containers:
       - name: webserver
         image: "kennethreitz/httpbin"
+        imagePullPolicy: Always
         ports:
         - name: webserver-80
           containerPort: 80
@@ -22,13 +25,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: webserver
+  labels:
+    app: webserver
 spec:
   type: NodePort
   ports:
   - name: webserver-80
     port: 80
   selector:
-    name: webserver
+    app: webserver
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
