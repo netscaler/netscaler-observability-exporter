@@ -19,7 +19,7 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
  - If Zipkin is used as the distributed tracer,
    ensure that you have the following docker images installed in the Kubernetes cluster:
     - [Zipkin](https://zipkin.io/)
-    - (Optional) [Elasticsearch](https://www.elastic.co/products/elasticsearch) as back-end for Zipkin. Elasticsearch is required if you want to visualize your tracing data in [Kibana](https://www.elastic.co/products/kibana). You can also use Elasticsearch as an endpoint for transactions.
+    - [Elasticsearch](https://www.elastic.co/products/elasticsearch) as back-end for Zipkin and to  visualize your tracing data in [Kibana](https://www.elastic.co/products/kibana). You can also use Elasticsearch as an endpoint for transactions.
     - [Kibana](https://www.elastic.co/products/kibana) is required to visualize your tracing data.
 
 **Note:**
