@@ -1,24 +1,26 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zipkin
-  labels:
-      name: zipkin
 spec:
+  selector:
+    matchLabels: 
+      app: zipkin
   replicas: 1
   template:
     metadata:
+      name: zipkin
       labels:
-        name: zipkin
+        app: zipkin
     spec:
       containers:
       - name: zipkin
-        image:  openzipkin/zipkin:2.18.3
+        image:  openzipkin/zipkin:2.19.2
         env:
          - name: "STORAGE_TYPE"
            value: "elasticsearch"
          - name: "ES_HOSTS"
-           value: "http://elasticsearch:9200"
+           value: "http://elasticsearch.default.svc.cluster.local:9200"
         ports:
         - name: zipkin-9411 
           containerPort: 9411 
@@ -28,11 +30,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zipkin
+  labels:
+    app: zipkin
 spec:
   type: NodePort
   ports:
   - name: zipkin-9411
     port: 9411
   selector:
-    name: zipkin
+    app: zipkin
 
