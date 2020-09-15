@@ -10,46 +10,56 @@ repo_name: "Citrix Observability Exporter"
 repo_url: "https://github.com/citrix/citrix-observability-exporter"
 edit_uri: "edit/master/docs" 
 
+# Feedback
+
+issues_uri: https://github.com/citrix/citrix-observability-exporter/issues/new
+assignees_uri:
+  - sreejithgs
+labels_uri:
+  - documentation
+
 # Copyright
-copyright: 'Copyright &copy; 1999-2020 Citrix Systems, Inc. All rights reserved. '
+copyright: '&copy; 1999-2020 Citrix Systems, Inc. All rights reserved.'
 
 extra_css:
   - 'assets/stylesheets/extra.css'
+  - https://use.fontawesome.com/releases/v5.12.1/css/all.css
+
 
 # Configuration
 theme:
   name: null
   custom_dir: devdocs-theme
-
+  
   # 404 page
   static_templates:
     - 404.html
-
+  
   # Don't include MkDocs' JavaScript
   include_search_page: false
   search_index_only: true
-
+  
   # Default values, taken from mkdocs_theme.yml
   language: en
-  feature:
-    tabs: false
+  features:
+    - tabs: false
   palette:
-    primary: white
-    accent: blue
+    primary: teal
+    accent: teal
   font: false
-  favicon: https://www.citrix.com/favicon.ico
-  logo: https://developer-docs.citrix.com/_static/Citrix_Logo_Black.png
+  favicon: https://docs.citrix.com/assets/images/favicon.ico
+  logo: https://developer-docs.citrix.com/_static/logo.svg
+  icon: fontawesome
 
-# Customization
 extra:
   social:
-    - type: youtube
+    - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/channel/UCiOupk9QF6jdk3EDKTHDykA
-    - type: github-alt
+    - icon: fontawesome/brands/github-alt
       link: https://github.com/citrix
-    - type: twitter
+    - icon: fontawesome/brands/twitter
       link: https://twitter.com/citrixdeveloper
-    - type: linkedin
+    - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/citrix/
 
 markdown_extensions:
@@ -57,9 +67,10 @@ markdown_extensions:
   - codehilite
   - toc:
       permalink: true
-  - footnotes
-  - meta
-  - extra
+
+plugins:
+  - search:
+      separator: '[\s\-\.]+'
 
 # Page tree
 nav:
