@@ -5,31 +5,32 @@ metadata:
 data:
   lstreamd_default.conf: |
     {
-        "RecordType": {
-            "HTTP": "all",
-            "TCP": "all",
-            "SWG": "all",
-            "VPN": "all",
-            "NGS": "all",
-            "ICA": "all",
-            "APPFW": "none",
-            "BOT": "none",
-            "VIDEOOPT": "none",
-            "BURST_CQA": "none",
-            "SLA": "none"
-        },
-        "EnableTracing": "no",
-        "ProcessAlways": "yes",
-        "ProcessorMode": "json",
-        "FileSizeMax": "40",
-        "ElkServer": "elasticsearch.default.svc.cluster.local:9200",
-        "ElkMaxConnections": "512",
-        "ElkMaxSendBuffersPerSec": "128",
-        "ElkBufferingLimit": "1024*1024",
-        "ELKFileDump": "yes",
-        "SkipAvro": "yes",
-        "ProcessYieldTimeOut": "500",
-        "FileStorageLimit": "1000"
+        "Endpoints": {
+            "ES": {
+                "ServerUrl": "elasticsearch.default.svc.cluster.local:9200",
+                "IndexPrefix":"adc_coe",
+                "IndexInterval": "daily",
+                "RecordType": {
+                    "HTTP": "all",
+                    "TCP": "all",
+                    "SWG": "all",
+                    "VPN": "all",
+                    "NGS": "all",
+                    "ICA": "all",
+                    "APPFW": "none",
+                    "BOT": "none",
+                    "VIDEOOPT": "none",
+                    "BURST_CQA": "none",
+                    "SLA": "none",
+                    "MONGO": "none"
+                },
+                "ProcessAlways": "no",
+                "ProcessYieldTimeOut": "500",
+                "MaxConnections": "512",
+                "ElkMaxSendBuffersPerSec": "64",
+                "JsonFileDump": "no"
+            }
+        }
     }
 ---
 
@@ -49,27 +50,26 @@ spec:
       name: coe-es
       labels:
         app: coe-es
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "5563"
     spec:
       containers:
         - name: coe-es
-          image: "quay.io/citrix/citrix-observability-exporter:1.1.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.2.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
               name: lstream
-            - containerPort: 5563
-              name: rest
           volumeMounts:
             - name: lstreamd-config-es
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
               subPath: lstreamd_default.conf
+            - name: core-data
+              mountPath: /cores/
       volumes:
         - name: lstreamd-config-es
           configMap:
             name: coe-config-es
+        - name: core-data
+          emptyDir: {}
 ---
 # Citrix-observability-exporter headless service  
 apiVersion: v1
@@ -83,10 +83,6 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
-      name: lstreamd
-    - port: 5563
-      protocol: TCP
-      name: rest
   selector:
       app: coe-es
 ---
@@ -102,9 +98,5 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
-      name: lstreamd
-    - port: 5563
-      protocol: TCP
-      name: rest
   selector: 
-      app: coe-es 
+      app: coe-es

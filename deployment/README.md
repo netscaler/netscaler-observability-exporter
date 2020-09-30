@@ -1,7 +1,6 @@
 # Deploy Citrix Observability Exporter
 
 This topic provides information on how to deploy Citrix Observability Exporter using Kubernetes YAML files.
-To deploy Citrix Observability Exporter using Helm charts, see [Deploy using Helm charts](https://github.com/citrix/citrix-helm-charts/tree/master/citrix-observability-exporter).
 <!---
 You can deploy Citrix Observability Exporter using Kubernetes YAML files or using Helm charts. 
 -->
@@ -15,18 +14,18 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 
 ## Prerequisites
 
- - Ensure that you have a Kubernetes cluster with  `kube-dns` or `CoreDNS`.
+ - Ensure that you have a Kubernetes cluster with  `kube-dns` or `CoreDNS` addon enabled.
  - If Zipkin is used as the distributed tracer,
    ensure that you have the following docker images installed in the Kubernetes cluster:
     - [Zipkin](https://zipkin.io/)
-    - [Elasticsearch](https://www.elastic.co/products/elasticsearch) as back-end for Zipkin and to  visualize your tracing data in [Kibana](https://www.elastic.co/products/kibana). You can also use Elasticsearch as an endpoint for transactions.
+    - (Optional) [Elasticsearch](https://www.elastic.co/products/elasticsearch) as back-end for Zipkin. Elasticsearch is required if you want to visualize your tracing data in [Kibana](https://www.elastic.co/products/kibana). You can also use Elasticsearch as an endpoint for transactions.
     - [Kibana](https://www.elastic.co/products/kibana) is required to visualize your tracing data.
 
 **Note:**
     You can use [zipkin.yaml](../examples/zipkin.yaml), [elasticsearch.yaml](../examples/elasticsearch.yaml), and [kibana.yaml](../examples/kibana.yaml) for installing Zipkin, Elasticsearch, and Kibana.
 
 - If Elasticsearch is used as the endpoint for transactions, ensure that you have Elasticsearch installed and configured.
-- If Kafka is used as the endpoint for transactions, ensure that Kafka server is installed and configured.
+- If Kafka is used as the endpoint for transactions, ensure that the Kafka server is installed and configured.
 - If Prometheus is used as the endpoint for time series data, ensure that Prometheus is installed and configured.
 
 ## Deploy Citrix Observability Exporter using YAML
@@ -45,23 +44,22 @@ To deploy Citrix Observability Exporter using Kubernetes YAML, perform the follo
 
 - For Citrix Observability Exporter with Zipkin tracing support:
 
-   Deploy Citrix Observability Exporter using the [coe-tracing.yaml](coe-tracing.yaml) file.
+   Deploy Citrix Observability Exporter using the [coe-zipkin.yaml](coe-zipkin.yaml) file.
 
 
-        kubectl create -f  coe-tracing.yaml
+        kubectl create -f  coe-zipkin.yaml
 
-   Set the `EnableTracing` option to `yes` and provide the Zipkin server information using `TracingServer`.
-You can specify the tracing server in ConfigMap using environment variables in two ways:
+You can specify the Zipkin server information in ConfigMap using environment variables in two ways:
 
    - Specify the IP address or DNS name of the tracing server (Zipkin):
 
-                TRACING_SERVER=<ip-address> or <dns-name>
+                ServerUrl=<ip-address> or <dns-name>
 
    If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
 
   - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
        
-                TRACING_SERVER=<ip-address>:<port>/api/v1/spans
+                ServerUrl=<ip-address>:<port>/api/v1/spans
 
 - For Citrix Observability Exporter with Elasticsearch as the endpoint:
 
@@ -69,7 +67,7 @@ You can specify the tracing server in ConfigMap using environment variables in t
    
         kubectl create -f coe-es.yaml
 
-     Set the Elasticsearch server details in the `ELKServer` environment variable either based on IP address or DNS name, along with port information.
+     Set the Elasticsearch server details in the `ServerUrl` environment variable either based on IP address or DNS name, along with port information.
 
 - For Citrix Observability Exporter with Kafka as the endpoint:
 
@@ -77,16 +75,16 @@ You can specify the tracing server in ConfigMap using environment variables in t
    
         kubectl create -f coe-kafka.yaml
 
-   Enable the Kafka endpoint by setting the value of `EnableKafka` as `yes`. Also, set Kafka broker details in `KafkaBroker` and topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
+   Enable the Kafka endpoint by setting the Kafka broker details in the `ServerUrl` environment variable either based on IP address or DNS name, along with port information. Then specify the Kafka topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
 
 - For Citrix Observability Exporter with Prometheus as the endpoint for time series data:
 
-   You can enable Prometheus support by specifying the following annotations in the YAML files to deploy Zipkin, Kafka, or Elasticsearch and exposing the time series port.
+   You can enable Prometheus support by specifying the following annotations in the YAML files to deploy Zipkin, Kafka, or Elasticsearch and exposing the time series port. You need to also specify the time series parameter with metrics enable set as `true` and the mode set to `prometheus` in the respective `cic-configmap.yaml` file for the endpoint.
 
         prometheus.io/scrape: "true"
         prometheus.io/port: "5563"
 
-   The following command deploys Citrix Observability Exporter with both Elasticsearch and Prometheus as endpoints, using the [coe-es-prometheus.yaml](coe-es-prometheus.yaml) file. In this YAML file, annotations for Prometheus support are enabled and port 5563 is exposed which is used for the time series data. 
+   The following command deploys Citrix Observability Exporter with both Elasticsearch and Prometheus as endpoints, using the [coe-es-prometheus.yaml](coe-es-prometheus.yaml) file. In this YAML file, annotations for Prometheus support are enabled and port 5563 is exposed which is used for the time series data.
 
         kubectl create -f coe-es-prometheus.yaml
 
@@ -112,8 +110,9 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
     - For tracing support with Zipkin:  [cpx-ingress-tracing.yaml](../examples/tracing/cpx-ingress-tracing.yaml)
     - For Elasticsearch as the transaction endpoint: [cpx-ingress-es.yaml](../examples/elasticsearch/cpx-ingress-es.yaml)
     - For Kafka as the transaction endpoint: [cpx-ingress-kafka.yaml](../examples/kafka/cpx-ingress-kafka.yaml)
+    - For Prometheus as the time series data endpoint: [cpx-ingress-prometheus.yaml](../examples/prometheus/cpx-ingress-prometheus.yaml)
 
-2. Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](../examples/cic-configmap.yaml) file.
+2. Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](../examples/cic-configmap.yaml) file or the one that is available within the endpoint example directory.
 
              kubectl create -f cic-configmap.yaml
 
@@ -121,13 +120,17 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 
     - For tracing support with Zipkin:
 
-                kubectl create -f cpx-ingress-tracing.yaml 
+                kubectl create -f cpx-ingress-tracing.yaml
     - For Elasticsearch as the transaction endpoint:
         
-                 kubectl create -f cpx-ingress-es.yaml 
-     - For Kafka as the transaction endpoint:
+                 kubectl create -f cpx-ingress-es.yaml
+    - For Kafka as the transaction endpoint:
 
-                 kubectl create -f cpx-ingress-kafka.yaml 
+                 kubectl create -f cpx-ingress-kafka.yaml
+    
+    - For Prometheus as the time series data endpoint:
+
+                 kubectl create -f cpx-ingress-prometheus.yaml
 
 **Note:**
   Using [smart annotations](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/configure/annotations/), you can define specific parameters you must import by specifying it in the YAML file for deploying Citrix ADC CPX.
@@ -206,7 +209,7 @@ file. This sample web application is added as a service in the Ingress.
 
         kubectl create -f webserver-es.yaml  
 
-1. Create a host entry for the web application in Citrix ADC CPX hosts file and map it to the IP address of Kubernetes master node for DNS resolution.
+1. Create a host entry for the web application in Citrix ADC CPX hosts file and map it to the IP address of the Kubernetes master node for DNS resolution.
 
         www.samplewebserver.com ip-address
 
@@ -231,7 +234,7 @@ file. This sample web application is added as a service in the Ingress.
 
    **Note:**
    You can import the Kibana dashboard template from [dashboards](../dashboards/KibanaAppTrans.ndjson).
-   Before importing the Kibana dashboard, you must define an index pattern named `*http*` using the information in the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/tutorial-define-index.html).
+   This Kibana dashboard uses the default index prefix `adc_coe`, you must define an index pattern named `adc_coe*` using the information in the [Kibana User Guide](https://www.elastic.co/guide/en/kibana/current/tutorial-define-index.html).
 
 ### Sample Grafana dashboard for Prometheus
 

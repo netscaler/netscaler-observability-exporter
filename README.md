@@ -37,11 +37,14 @@ Citrix Observability Exporter supports collecting time series data (metrics) fro
 
 Logstream is a Citrix-owned protocol that is used as one of the transport modes to efficiently transfer transactions from Citrix ADC instances. Citrix Observability Exporter collects tracing data as Logstream records from multiple Citrix ADCs and aggregates them. Citrix Observability Exporter converts the data into a format understood by the tracer and then uploads to the tracer (Zipkin in this case). For Zipkin, the data is converted into JSON, with Zipkin-specific key values.
 
-You can view the traces using Zipkin user interface. However, you can also enhance the trace analysis by using [Elasticsearch](https://www.elastic.co/products/elasticsearch) and [Kibana](https://www.elastic.co/products/kibana) with Zipkin. Elasticsearch provides long-term retention of the trace data and Kibana allows you to get much deeper insight into the data.
+You can view the traces using the Zipkin user interface. However, you can also enhance the trace analysis by using [Elasticsearch](https://www.elastic.co/products/elasticsearch) and [Kibana](https://www.elastic.co/products/kibana) with Zipkin. Elasticsearch provides long-term retention of the trace data and Kibana allows you to get much deeper insight into the data.
 
 ### Citrix Observability Exporter with Elasticsearch as the transaction endpoint
 
+
 When Elasticsearch is specified as the transaction endpoint, Citrix Observability Exporter converts the data to JSON format. On the Elasticsearch server, Citrix Observability Exporter creates Elasticsearch indexes for each ADC on an hourly basis. These indexes are based on data, hour, UUID of the ADC, and the type of HTTP data (http_event or http_error). Then, Citrix Observability Exporter uploads the data in JSON format under Elastic search indexes for each ADC. All regular transactions are placed into the http_event index and any anomalies are placed into the http_error index.  
+
+Effective with the Citrix Observability Exporter release 1.2.001, when the Citrix Observability Exporter sends the data to the Elasticsearch server some of the fields are available in the string format. Also, index configuration options are also added for Elasticsearch. For more information on fields which are in the string format and how to configure the Elasticsearch index, see [Elasticsearch support enhancements](./es-enhancements/README.md).
 
 ### Citrix Observability Exporter with Kafka as the transaction endpoint
 
@@ -49,18 +52,11 @@ When Kafka is specified as the transaction endpoint, Citrix Observability Export
 
 ### Citrix Observability Exporter with Prometheus as the endpoint for time series data
 
-When Prometheus is specified as the format for time series data, Citrix Observability Exporter collects various metrics from Citrix ADCs and converts them to appropriate Prometheus format and exports them to the Prometheus server. These metrics include counters of the virtual servers, services to which the analytics profile is bound and global counters of HTTP, TCP and so on.
+When Prometheus is specified as the format for time series data, Citrix Observability Exporter collects various metrics from Citrix ADCs and converts them to the appropriate Prometheus format and exports them to the Prometheus server. These metrics include counters of the virtual servers, services to which the analytics profile is bound and global counters of HTTP, TCP, and so on.
 
 ## Deployment
 
-You can deploy Citrix Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix Observability Exporter using Kubernetes YAML, see [Deployment](deployment/README.md). To deploy Citrix Observability Exporter using Helm charts, see [Deploy using Helm charts](https://github.com/citrix/citrix-helm-charts/tree/master/citrix-observability-exporter).
-
-## Features
-
-### Custom header logging
-
-Custom header logging enables logging of all HTTP headers of a transaction and currently supported on the Kafka endpoint.
-For more information, see [Custom header logging](https://github.com/citrix/citrix-observability-exporter/tree/master/custom-header).
+You can deploy Citrix Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix Observability Exporter using Kubernetes YAML, see [Deployment](deployment/README.md).
 
 ## Questions
 

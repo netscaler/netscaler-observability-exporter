@@ -45,7 +45,7 @@ metadata:
    ingress.citrix.com/analyticsprofile: '{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED", "httphost":"ENABLED", "httpmethod":"ENABLED", "httpcontenttype":"ENABLED"}, "tcpinsight": {"tcpBurstReporting":"DISABLED"}}'
 spec:
       tls:
-       - secretName: ing
+       - secretName: 
       rules:
        - http:
           paths:

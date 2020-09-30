@@ -22,7 +22,7 @@ data:
                     "VIDEOOPT": "none",
                     "BURST_CQA": "none",
                     "SLA": "none",
-                    "MONGO": "none"
+                    "MONGO": "all"
                 },
                 "ProcessAlways": "no",
                 "ProcessYieldTimeOut": "500",

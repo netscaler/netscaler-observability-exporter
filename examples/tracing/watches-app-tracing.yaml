@@ -1,15 +1,16 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: amazon 
-  labels:
-      name: amazon
 spec:
+  selector:
+    matchLabels:
+      app: amazon
   replicas: 1
   template:
     metadata:
       labels:
-        name: amazon
+        app: amazon
     spec:
       containers:
       - name: amazon
@@ -20,7 +21,7 @@ spec:
          - name: "ZIPKIN_PORT"
            value: "9411"
          - name: "CS_PROXY"
-           value: "cpx-ingress.default.svc.cluster.local"
+           value: "cpx-ingress-zipkin.default.svc.cluster.local"
          - name: "CS_PORT"
            value: "80"
          - name: "DEBUG"
@@ -29,18 +30,19 @@ spec:
         - name: amazon-1719
           containerPort: 1719
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fasttrack
-  labels:
-      name: fasttrack
+  name: fasttrack 
 spec:
+  selector:
+    matchLabels:
+      app: fasttrack
   replicas: 1
   template:
     metadata:
       labels:
-        name: fasttrack
+        app: fasttrack
     spec:
       containers:
       - name: fasttrack
@@ -51,25 +53,26 @@ spec:
          - name: "ZIPKIN_PORT"
            value: "9411"
          - name: 'CS_PROXY'
-           value: "cpx-ingress.default.svc.cluster.local"
+           value: "cpx-ingress-zipkin.default.svc.cluster.local"
          - name: 'CS_PORT'
            value: "80"
         ports:
         - name: fasttrack-1720
           containerPort: 1720
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titan
-  labels:
-      name: titan
+  name: titan 
 spec:
+  selector:
+    matchLabels:
+      app: titan
   replicas: 1
   template:
     metadata:
       labels:
-        name: titan
+        app: titan
     spec:
       containers:
       - name: titan
@@ -80,25 +83,26 @@ spec:
          - name: "ZIPKIN_PORT"
            value: "9411"
          - name: 'CS_PROXY'
-           value: "cpx-ingress.default.svc.cluster.local"
+           value: "cpx-ingress-zipkin.default.svc.cluster.local"
          - name: 'CS_PORT'
            value: "80"
         ports:
         - name: titan-1721
           containerPort: 1721
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: casio 
-  labels:
-      name: casio
 spec:
+  selector:
+    matchLabels:
+      app: casio
   replicas: 1
   template:
     metadata:
       labels:
-        name: casio
+        app: casio
     spec:
       containers:
       - name: casio
@@ -109,25 +113,26 @@ spec:
          - name: "ZIPKIN_PORT"
            value: "9411"
          - name: 'CS_PROXY'
-           value: "cpx-ingress.default.svc.cluster.local"
+           value: "cpx-ingress-zipkin.default.svc.cluster.local"
          - name: 'CS_PORT'
            value: "80"
         ports:
         - name: casio-1722
           containerPort: 1722
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonata 
-  labels:
-      name: sonata
 spec:
+  selector:
+    matchLabels:
+      app: sonata
   replicas: 1
   template:
     metadata:
       labels:
-        name: sonata
+        app: sonata
     spec:
       containers:
         - name: sonata
@@ -139,7 +144,7 @@ spec:
             - name: "ZIPKIN_PORT"
               value: "9411"
             - name: 'CS_PROXY'
-              value: 'cpx-ingress.default.svc.cluster.local'
+              value: 'cpx-ingress-zipkin.default.svc.cluster.local'
             - name: 'CS_PORT'
               value: "80"
           ports:
@@ -159,35 +164,35 @@ spec:
       tls:
        - secretName: ing
       rules:
-       - host: cpx-ingress.default.svc.cluster.local
+       - host: cpx-ingress-zipkin.default.svc.cluster.local
          http:
           paths:
           - path: /serial/view/watches
             backend:
               serviceName: amazon 
               servicePort: 1719
-       - host: cpx-ingress.default.svc.cluster.local
+       - host: cpx-ingress-zipkin.default.svc.cluster.local
          http:
           paths:
           - path: /fasttrack/get
             backend:
               serviceName: fasttrack
               servicePort: 1720
-       - host: cpx-ingress.default.svc.cluster.local
+       - host: cpx-ingress-zipkin.default.svc.cluster.local
          http:
           paths:
           - path: /titan/get
             backend:
               serviceName: titan
               servicePort: 1721
-       - host: cpx-ingress.default.svc.cluster.local
+       - host: cpx-ingress-zipkin.default.svc.cluster.local
          http:
           paths:
           - path: /casio/get
             backend:
               serviceName: casio
               servicePort: 1722
-       - host: cpx-ingress.default.svc.cluster.local
+       - host: cpx-ingress-zipkin.default.svc.cluster.local
          http:
           paths:
           - path: /sonata/get
@@ -206,7 +211,7 @@ spec:
   - name: amazon-1719
     port: 1719
   selector:
-    name: amazon
+    app: amazon
 ---
 apiVersion: v1
 kind: Service
@@ -218,7 +223,7 @@ spec:
   - name: fasttrack-1720
     port: 1720
   selector:
-    name: fasttrack
+    app: fasttrack
 ---
 apiVersion: v1
 kind: Service
@@ -230,7 +235,7 @@ spec:
   - name: titan-1721
     port: 1721
   selector:
-    name: titan
+    app: titan
 ---
 apiVersion: v1
 kind: Service
@@ -242,7 +247,7 @@ spec:
   - name: casio-1722
     port: 1722
   selector:
-    name: casio
+    app: casio
 ---
 apiVersion: v1
 kind: Service
@@ -254,5 +259,5 @@ spec:
   - name: sonata-1723
     port: 1723
   selector:
-    name: sonata
+    app: sonata
 ---
