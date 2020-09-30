@@ -1,11 +1,24 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: coe-config-prometheus
+  name: coe-config-zipkin
 data:
   lstreamd_default.conf: |
     {
         "Endpoints": {
+          "ZIPKIN": {
+            "ServerUrl": "zipkin.default.svc.cluster.local:9411/api/v1/spans",
+            "RecordType": {
+                "HTTP": "all",
+                "TCP": "all",
+                "SWG": "all"
+            },
+            "ProcessAlways": "yes",
+            "ProcessorMode": "avro",
+            "SkipAvro": "yes",
+            "FileSizeMax": "40",
+            "ProcessYieldTimeOut": "500"
+          }
         }
     }
 ---
@@ -13,42 +26,39 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: coe-prometheus
+  name: coe-zipkin
   labels: 
-    app: coe-prometheus
+    app: coe-zipkin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: coe-prometheus
+      app: coe-zipkin
   template:
     metadata:
-      name: coe-prometheus
+      name: coe-zipkin
       labels:
-        app: coe-prometheus
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "5563"
+        app: coe-zipkin
     spec:
       containers:
-        - name: coe-prometheus
+        - name: coe-zipkin
           image: "quay.io/citrix/citrix-observability-exporter:1.2.001"
           imagePullPolicy: Always
           securityContext:
             privileged: true
           ports:
-            - containerPort: 5563
-              name: rest
+            - containerPort: 5557
+              name: lstream
           volumeMounts:
-            - name: lstreamd-config-prometheus
+            - name: lstreamd-config-zipkin
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
               subPath: lstreamd_default.conf
             - name: core-data
               mountPath: /cores/
       volumes:
-        - name: lstreamd-config-prometheus
+        - name: lstreamd-config-zipkin
           configMap:
-            name: coe-config-prometheus
+            name: coe-config-zipkin
         - name: core-data
           emptyDir: {}
 ---
@@ -56,30 +66,30 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: coe-prometheus
+  name: coe-zipkin
   labels:
-    app: coe-prometheus
+    app: coe-zipkin
 spec:
   clusterIP: None
   ports:
-    - port: 5563
+    - port: 5557
+      name: lstreamd
       protocol: TCP
-      name: rest
   selector:
-      app: coe-prometheus
+      app: coe-zipkin
 ---
 # Citrix-observability-exporter NodePort service
 apiVersion: v1
 kind: Service
 metadata:
-  name: coe-prometheus-nodeport
+  name: coe-zipkin-nodeport
   labels:
-    app: coe-prometheus
+    app: coe-zipkin
 spec:
   type: NodePort
   ports:
-    - port: 5563
+    - port: 5557
+      name: lstreamd-nodeport
       protocol: TCP
-      name: rest
   selector:
-    app: coe-prometheus
+    app: coe-zipkin

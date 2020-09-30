@@ -69,22 +69,22 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cpx-ingress-es
+  name: cpx-ingress-prometheus
 spec:
   selector:
     matchLabels:
-      app: cpx-ingress-es
+      app: cpx-ingress-prometheus
   replicas: 1
   template:
     metadata:
-      name: cpx-ingress-es
+      name: cpx-ingress-prometheus
       labels:
-        app: cpx-ingress-es
+        app: cpx-ingress-prometheus
       annotations:
     spec:
       serviceAccountName: cpx-ingress-k8s-role
       containers:
-        - name: cpx-ingress-es
+        - name: cpx-ingress-prometheus
           image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-64.35"
           volumeMounts:
             - mountPath: /var/deviceinfo
@@ -130,6 +130,8 @@ spec:
           - configMapRef:
               name: cic-configmap
           args:
+#            - --configmap
+#              default/cic-configmap
             - --ingress-classes
               webserver-ingress
           imagePullPolicy: Always
@@ -142,9 +144,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cpx-ingress-es
+  name: cpx-ingress-prometheus
   labels:
-    app: cpx-ingress-es
+    app: cpx-ingress-prometheus
 spec:
   type: NodePort
   ports:
@@ -155,4 +157,4 @@ spec:
     protocol: TCP
     name: https
   selector:
-    app: cpx-ingress-es
+    app: cpx-ingress-prometheus

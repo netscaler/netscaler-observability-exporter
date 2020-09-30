@@ -4,30 +4,33 @@ metadata:
   name: coe-config-kafka
 data:
   lstreamd_default.conf: |
-    {
-        "RecordType": {
-            "HTTP": "all",
-            "TCP": "all",
-            "SWG": "all",
-            "VPN": "all",
-            "NGS": "all",
-            "ICA": "all",
-            "APPFW": "none",
-            "BOT": "none",
-            "VIDEOOPT": "none",
-            "BURST_CQA": "none",
-            "SLA": "none"
-        },
-        "EnableTracing": "no",
-        "ProcessAlways": "yes",
-        "ProcessorMode": "avro",
-        "FileSizeMax": "40",
-        "SkipAvro": "no",
-        "EnableKafka": "yes",
-        "KafkaBroker": "X.X.X.X:9092", 
-        "KafkaTopic": "HTTP",
-        "ProcessYieldTimeOut": "500",
-        "FileStorageLimit": "1000"
+    { 
+        "Endpoints": {
+          "KAFKA": {
+            "ServerUrl": "X.X.X.X:9092",
+            "KafkaTopic": "HTTP",
+            "RecordType": {
+                "HTTP": "all",
+                "TCP": "all",
+                "SWG": "all",
+                "VPN": "all",
+                "NGS": "all",
+                "ICA": "all",
+                "APPFW": "none",
+                "BOT": "none",
+                "VIDEOOPT": "none",
+                "BURST_CQA": "none",
+                "SLA": "none",
+                "MONGO": "none"
+            },
+            "ProcessAlways": "yes",
+            "FileSizeMax": "40",
+            "ProcessYieldTimeOut": "500",
+            "FileStorageLimit": "1000",
+            "SkipAvro": "no",
+            "AvroCompress": "yes"
+          }
+       }
     }
 ---
 
@@ -51,16 +54,16 @@ spec:
       hostAliases:
         - ip: "X.X.X.X"
           hostnames:
-            - "kubernetes-master"
+            - "kafka-node1"
         - ip: "Y.Y.Y.Y"
           hostnames:
-            - "kubernetes-slave1"
+            - "kafka-node2"
         - ip: "Z.Z.Z.Z"
           hostnames:
-            - "kubernetes-slave2"
+            - "kafka-node3"
       containers:
         - name: coe-kafka
-          image: "quay.io/citrix/citrix-observability-exporter:1.1.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.2.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
@@ -69,10 +72,14 @@ spec:
             - name: lstreamd-config-kafka
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
               subPath: lstreamd_default.conf
+            - name: core-data
+              mountPath: /cores/
       volumes:
         - name: lstreamd-config-kafka
           configMap:
             name: coe-config-kafka
+        - name: core-data
+          emptyDir: {}
 ---
 # Citrix-observability-exporter headless service  
 apiVersion: v1
@@ -102,4 +109,4 @@ spec:
     - port: 5557
       protocol: TCP
   selector: 
-      app: coe-kafka 
+      app: coe-kafka

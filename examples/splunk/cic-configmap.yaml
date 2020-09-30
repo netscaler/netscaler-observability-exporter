@@ -6,19 +6,19 @@ metadata:
 data:
    NS_ANALYTICS_CONFIG: |
      distributed_tracing:
-       enable: 'true'
+       enable: 'false'
        samplingrate: 100
      endpoint:
-       server: 'X.X.X.X'
-     timeseries:
-       port: 5563
+       server: 'coe-splunk.default.svc.cluster.local'
+     timeseries: 
+       port: 5563 
        metrics:
-         enable: 'true'
-         mode: 'prometheus'
+         enable: 'false'
+         mode: 'avro' 
        auditlogs:
-         enable: 'true'
-       events:
-         enable: 'true'
+         enable: 'false'
+       events: 
+         enable: 'false'
      transactions:
        enable: 'true'
-       port: 5557
+       port: 5557 
