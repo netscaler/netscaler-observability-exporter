@@ -38,7 +38,7 @@ Citrix Observability Exporter supports collecting time series data (metrics) fro
 
 Logstream is a Citrix-owned protocol that is used as one of the transport modes to efficiently transfer transactions from Citrix ADC instances. Citrix Observability Exporter collects tracing data as Logstream records from multiple Citrix ADCs and aggregates them. Citrix Observability Exporter converts the data into a format understood by the tracer and then uploads to the tracer (Zipkin in this case). For Zipkin, the data is converted into JSON, with Zipkin-specific key values.
 
-You can view the traces using Zipkin user interface. However, you can also enhance the trace analysis by using [Elasticsearch](https://www.elastic.co/products/elasticsearch) and [Kibana](https://www.elastic.co/products/kibana) with Zipkin. Elasticsearch provides long-term retention of the trace data and Kibana allows you to get much deeper insight into the data.
+You can view the traces using the Zipkin user interface. However, you can also enhance the trace analysis by using [Elasticsearch](https://www.elastic.co/products/elasticsearch) and [Kibana](https://www.elastic.co/products/kibana) with Zipkin. Elasticsearch provides long-term retention of the trace data and Kibana allows you to get much deeper insight into the data.
 
 ### Citrix Observability Exporter with Elasticsearch as the transaction endpoint
 
@@ -62,3 +62,7 @@ You can deploy Citrix Observability Exporter using Kubernetes YAML. To deploy Ci
 
 Custom header logging enables logging of all HTTP headers of a transaction and currently supported on the Kafka endpoint.
 For more information, see [Custom header logging](https://github.com/citrix/citrix-observability-exporter/tree/master/custom-header).
+
+### Elasticsearch support enhancements
+
+Effective with the Citrix Observability Exporter release 1.2.001, when the Citrix Observability Exporter sends the data to the Elasticsearch server some of the fields are available in the string format. Also, index configuration options are also added for Elasticsearch. For more information on fields which are in the string format and how to configure the Elasticsearch index, see [Elasticsearch support enhancements](https://github.com/citrix/citrix-observability-exporter/blob/master/es-enhancements/README.md).
