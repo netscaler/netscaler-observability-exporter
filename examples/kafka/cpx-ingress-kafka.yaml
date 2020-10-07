@@ -85,7 +85,7 @@ spec:
       serviceAccountName: cpx-ingress-k8s-role
       containers:
         - name: cpx-ingress-kafka
-           image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-64.35"
+          image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-64.35"
           volumeMounts:
             - mountPath: /var/deviceinfo
               name: shared-data
