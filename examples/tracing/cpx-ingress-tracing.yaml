@@ -126,10 +126,9 @@ spec:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.namespace
-          envFrom:
-          - configMapRef:
-              name: cic-configmap
           args:
+            - --configmap
+              default/cic-configmap
             - --ingress-classes
               watches-ingress
           imagePullPolicy: Always
