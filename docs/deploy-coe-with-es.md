@@ -50,7 +50,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
           server: 'coe-es.default.svc.cluster.local' # COE service FQDN
   
-  **Note**: If you have used a namespace other than *default*, change `coe-es.default.svc.cluster.local to` to `coe-es.<desired-namespace>.svc.cluster.local`. If ADC is outside the Kubernetes cluster, then you must specify IP address and nodport address of Citrix ADC Observability Exporter.
+   **Note**: If you have used a namespace other than *default*, change `coe-es.default.svc.cluster.local to` to `coe-es.<desired-namespace>.svc.cluster.local`. If ADC is outside the Kubernetes cluster, then you must specify IP address and nodport address of Citrix ADC Observability Exporter.
 
 ## Deploy Elasticsearch and Kibana using YAML files
 
@@ -97,27 +97,27 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
    
       a. Click **Explore on my own**.
 
-      ![](media/coe-es-click-explore.png)
+         ![](media/coe-es-click-explore.png)
 
       b. Click **Connect to your Elasticsearch index**.
 
-      ![](media/coe-es-connect-to-index.png)
+         ![](media/coe-es-connect-to-index.png)
 
       c. Click **Saved Objects**.
    
       d. Download and import the Kibana Dashboard from [KibanaAppTrans.ndjson](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/dashboards/KibanaAppTrans.ndjson).
    
-      ![](media/coe-es-saved-objects.png)
+        ![](media/coe-es-saved-objects.png)
 
       e. Click **App Transaction dashboard**.
 
-      ![](media/coe-es-transact-dashboard.png)
+         ![](media/coe-es-transact-dashboard.png)
 
-      The dashboard appears.
+         The dashboard appears.
 
-      ![](media/coe-es-indices-dashboard.png)
+         ![](media/coe-es-indices-dashboard.png)
 
-      ![Elasticsearch indexes based on configuration](media/coe-es-indices-basedon-config.png)
+         ![Elasticsearch indexes based on configuration](media/coe-es-indices-basedon-config.png)
 
 ## Integrate Citrix ADC with multiple Citrix ADC Observability Exporter instances manually
 

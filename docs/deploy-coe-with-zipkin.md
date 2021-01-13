@@ -130,12 +130,12 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
   
        In the following image, you can view the traces of the *Watches* application. The *Watches* application has multiple microservices for each watches type, communicating with each other to serve the application data. The trace data shows application `FASTTRACK` took more time to serve when compare to other micro services. In this way, you can identify the slow performing  workloads and troubleshoot it.
 
-      ![](media/ceo-zipkin-show-traces.png)
+        ![](media/ceo-zipkin-show-traces.png)
   
        You can view raw data on your Kibana dashboard too. Open Kibana using the `http://<node-ip>:<node-port>` and commence with defining a *zipkin* index pattern.
        
        Use the `timestamp_millis` field as the timestamp field. After creating the index pattern, click the **Discover** tab and you can view the trace information collected by Zipkin.
 
-      ![](media/coe-zipkin-traces.png)
+        ![](media/coe-zipkin-traces.png)
 
-      For information on troubleshooting related to Citrix ADC Observability Exporter, see [Citrix ADC CPX troubleshooting](https://docs.citrix.com/en-us/citrix-adc-cpx/current-release/cpx-troubleshooting.html).
+        For information on troubleshooting related to Citrix ADC Observability Exporter, see [Citrix ADC CPX troubleshooting](https://docs.citrix.com/en-us/citrix-adc-cpx/current-release/cpx-troubleshooting.html).
