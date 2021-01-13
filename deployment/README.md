@@ -15,10 +15,10 @@ Citrix ADC Observability Exporter supports the following endpoints: Kafka, Elast
 
  You can use one of the following deployment procedures based on the endpoint that you require:
 
-  -  [Deploy Citrix ADC Observability Exporter with Zipkin](deploy-coe-with-zipkin.md)
+  -  [Deploy Citrix ADC Observability Exporter with Zipkin](/docs/deploy-coe-with-zipkin.md)
 
-  -  [Deploy Citrix ADC Observability Exporter with Prometheus](deploy-coe-with-prometheus.md)
+  -  [Deploy Citrix ADC Observability Exporter with Prometheus](/docs/deploy-coe-with-prometheus.md)
 
-  -  [Deploy Citrix ADC Observability Exporter with Elasticsearch](deploy-coe-with-es.md)
+  -  [Deploy Citrix ADC Observability Exporter with Elasticsearch](/docs/deploy-coe-with-es.md)
 
-  -  [Deploy Citrix ADC Observability Exporter with Kafka](deploy-coe-with-Kafka.md)
+  -  [Deploy Citrix ADC Observability Exporter with Kafka](/docs/deploy-coe-with-Kafka.md)
