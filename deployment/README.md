@@ -11,12 +11,14 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 
 ![Citrix Observability Exporter](../media/citrix-observability-exporter-deploy.png)
 
-Citrix ADC Observability Exporter supports endpoints: Kafka, Elasticsearch, Prometheus, and Zipkin. Depending on the endpoint that you require, you can deploy Citrix ADC Observability Exporter with that endpoint. You can use the following the deployment procedure based on the endpoint that you selected.
+Citrix ADC Observability Exporter supports the following endpoints: Kafka, Elasticsearch, Prometheus, and Zipkin. Depending on the endpoint that you require, you can deploy Citrix ADC Observability Exporter with that endpoint.
 
-  [Deploy Citrix ADC Observability Exporter with Kafka](../docs/deploy-coe-with-Kafka.md)
+ You can use one of the following deployment procedures based on the endpoint that you require:
 
-  [Deploy Citrix ADC Observability Exporter with Elasticsearch](../docs/deploy-coe-with-es.md)
+  -  [Deploy Citrix ADC Observability Exporter with Zipkin](deploy-coe-with-zipkin.md)
 
-  [Deploy Citrix ADC Observability Exporter with Prometheus](../docs/deploy-coe-with-prometheus.md)
+  -  [Deploy Citrix ADC Observability Exporter with Prometheus](deploy-coe-with-prometheus.md)
 
-  [Deploy Citrix ADC Observability Exporter with Zipkin](../docs/deploy-coe-with-zipkin.md)
+  -  [Deploy Citrix ADC Observability Exporter with Elasticsearch](deploy-coe-with-es.md)
+
+  -  [Deploy Citrix ADC Observability Exporter with Kafka](deploy-coe-with-Kafka.md)
