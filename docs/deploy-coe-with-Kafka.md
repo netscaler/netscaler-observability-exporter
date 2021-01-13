@@ -178,7 +178,9 @@ To edit the YAML file for the required changes, perform the following steps:
         selector:
             app: coe-kafka
       ---
-    # Citrix-observability-exporter NodePort service
+      ```
+
+      **Citrix-observability-exporter NodePort service**
     
       ```yml
       apiVersion: v1
