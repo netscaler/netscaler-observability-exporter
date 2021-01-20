@@ -77,4 +77,8 @@ nav:
   - Overview: index.md
   - Release notes: https://github.com/citrix/citrix-observability-exporter/releases
   - Deploy Citrix ADC Observability Exporter: deploy-coe.md
+    -  Citrix ADC Observability Exporter with Zipkin: deploy-coe-with-zipkin.md
+    -  Citrix ADC Observability Exporter with Prometheus and Grafana: deploy-coe-with-prometheus.md
+    -  Citrix ADC Observability Exporter with Elasticsearch: deploy-coe-with-es.md
+    -  Citrix ADC Observability Exporter with Kafka: deploy-coe-with-Kafka.md
   - Troubleshooting: coe-troubleshooting.md
