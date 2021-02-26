@@ -24,7 +24,7 @@ Perform the following steps to deploy Citrix ADC Observability Exporter:
 
   **Note**: If you have a pre-deployed web application, skip the step 1 and 2.
 
-  1.  Create a secret using the certificate and key. Access the certificate from [ingress.crt](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.crt) and the key from [ingress.key](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.key). You can also use your own certificate and key.
+  1.  Create a secret [ingress.crt](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.crt) and key [ingress.key](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.key) using your own certificate and key.
   
       In this example, a secret, called *ing* in the default namespace, is created.
 
