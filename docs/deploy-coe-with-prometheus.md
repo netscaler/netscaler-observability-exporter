@@ -4,7 +4,7 @@ You can configure Prometheus as an endpoint to pull data from Citrix ADC Observa
 
 Citrix ADC Observability Exporter has a push-gateway server that listens to port 5563 to serve metrics based on pull requests from Prometheus. Citrix ADC Observability Exporter exports time series data to Prometheus. 
 
-![](media/coe-prometheus-grafana-architecture.png)
+![Prometheus and Grafana architecture](media/coe-prometheus-grafana-architecture.png)
 
 ## Configure Citrix ADC Observability Exporter
 
@@ -20,7 +20,7 @@ Perform the following steps to deploy a sample webserver application:
 
 **Note**: If you have a pre-deployed web application, skip the steps from step 1 to step 3.
 
-  1.  Create a secret using the certificate and key. Access the certificate from [ingress.crt](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.crt) and the key from [ingress.key](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.key). You can also use your own certificate and key.
+  1.  Create a secret [ingress.crt](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.crt) and key [ingress.key](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.key) using your own certificate and key.
   
       In this example, a secret, called *ing* in the default namespace, is created.
 
@@ -117,7 +117,7 @@ In the current deployment, a Prometheus server has already been added as a data 
 
   You can modify the data and its representation in Grafana. For more information, see [Grafana Documentation](https://grafana.com/docs/grafana/latest/panels/panels-overview/).
 
-  ![](media/coe-prom-grafana-visualization.png)
+  ![Grafana dashboard](media/coe-prom-grafana-visualization.png)
 
   **Import pre-built dashboards for Grafana**
 

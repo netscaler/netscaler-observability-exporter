@@ -1,6 +1,6 @@
 # Citrix ADC Observability Exporter with Zipkin as endpoint
 
-Citrix Observability Exporter supports OpenTracing (OpenTracing is a part of OpenTelemetry now) using [Zipkin](https://zipkin.io/) as the endpoint. Citrix Observability Exporter transforms the tracing data collected from Citrix ADCs into supported formats suitable for OpenTracing and exports them to Zipkin. Zipkin is a distributed tracing system that helps to gather the timing data required to troubleshoot latency problems in microservice architectures. Elasticsearch is used for long-term retention of trace data and the traces can be visualized using the Zipkin UI or Kibana.
+Citrix ADC Observability Exporter supports OpenTracing (OpenTracing is a part of OpenTelemetry now) using [Zipkin](https://zipkin.io/) as the endpoint. Citrix ADC Observability Exporter transforms the tracing data collected from Citrix ADCs into supported formats suitable for OpenTracing and exports them to Zipkin. Zipkin is a distributed tracing system that helps to gather the timing data required to troubleshoot latency problems in microservice architectures. Elasticsearch is used for long-term retention of trace data and the traces can be visualized using the Zipkin UI or Kibana.
 
 The following diagram illustrates how the Zipkin architecture works:
 
@@ -14,21 +14,21 @@ The following diagram illustrates how the Zipkin architecture works:
 
 5. Zipkin API stores the trace data in the Elasticsearch database, and finally stitch the complete trace to the given HTTP request and visualize it in the visualization tool such as Kibana. You can view the time that the request spent on each microservices.
 
-![](media/coe-zipkin-architecture.png)
+![Zipkin architecture](media/coe-zipkin-architecture.png)
 
 ## Deploy Citrix ADC Observability Exporter
 
-Based on your Citrix ADC deployment, you can deploy Citrix Observability Exporter either outside or inside Kubernetes clusters. You can deploy Citrix Observability Exporter as a pod inside the Kubernetes cluster or enable the configuration on Citrix ADC MPX or VPX form factor outside the cluster. You can deploy Citrix Observability Exporter using the Kubernetes YAML file provided by Citrix.
+Based on your Citrix ADC deployment, you can deploy Citrix ADC Observability Exporter either outside or inside Kubernetes clusters. You can deploy Citrix Observability Exporter as a pod inside the Kubernetes cluster or enable the configuration on Citrix ADC MPX or VPX form factor outside the cluster. You can deploy Citrix ADC Observability Exporter using the Kubernetes YAML file provided by Citrix.
 
-The following diagram illustrates Citrix ADC as an ingress gateway with the Citrix ingress controller as a sidecar. Citrix Observability Exporter sends the tracing data collected from Citrix ADCs to Zipkin API. The tracing data is, then, uploaded to the Elasticsearch server. From Elasticsearch, the data is sent to Zipkin UI or Kibana UI for visualization.
+The following diagram illustrates Citrix ADC as an ingress gateway with the Citrix ingress controller as a sidecar. Citrix ADC Observability Exporter sends the tracing data collected from Citrix ADCs to Zipkin API. The tracing data is, then, uploaded to the Elasticsearch server. From Elasticsearch, the data is sent to Zipkin UI or Kibana UI for visualization.
 
-  ![Citrix ADC Observability Exporter Deployment](media/coe-zipkin-deployment.png)
+![Citrix ADC Observability Exporter Deployment](media/coe-zipkin-deployment.png)
 
 ### Prerequisites
 
   -  Ensure that you have a Kubernetes cluster with `kube-dns` or `CoreDNS` addon enabled.
 
-To deploy Citrix Observability Exporter with Zipkin, you must perform the following tasks:
+To deploy Citrix ADC Observability Exporter with Zipkin, you must perform the following tasks:
 
 1. Deploy the required application with the tracing support enabled.
 2. Deploy Citrix ADC CPX enabled with the Citrix Observability Exporter support.
@@ -41,7 +41,7 @@ To deploy a sample application with tracing enabled, perform the following steps
 
 **Note**: If you have a pre-deployed web application, skip the steps 1 and 2.
 
-  1.  Create a secret using the certificate and key. Access the certificate from [ingress.crt](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.crt) and the key from [ingress.key](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.key). You can also use your own certificate and key.
+  1.  Create a secret [ingress.crt](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.crt) and key [ingress.key](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/ingress.key) using your own certificate and key.
   
       In this example, a secret, called *ing* in the default namespace, is created.
 
@@ -108,9 +108,9 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
 ## Deploy Citrix ADC Observability Exporter using the YAML file
 
-  You can deploy Citrix Observability Exporter using the YAML file. Download the [coe-zipkin.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/tracing/coe-zipkin.yaml) file.
+  You can deploy Citrix ADC Observability Exporter using the YAML file. Download the [coe-zipkin.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/tracing/coe-zipkin.yaml) file.
 
-  To deploy Citrix Observability Exporter using the Kubernetes YAML, run the following command in the Elasticsearch endpoint:
+  To deploy Citrix ADC Observability Exporter using the Kubernetes YAML, run the following command in the Elasticsearch endpoint:
     
       kubectl create -f coe-zipkin.yaml
 
@@ -126,16 +126,16 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
 
   2.  Open the Zipkin user interface using the Kubernetes node IP address and nodeport.
 
-           http://*k8-node-ip-address*:*node-port*/
+          http://*k8-node-ip-address*:*node-port*/
   
        In the following image, you can view the traces of the *Watches* application. The *Watches* application has multiple microservices for each watches type, communicating with each other to serve the application data. The trace data shows application `FASTTRACK` took more time to serve when compare to other micro services. In this way, you can identify the slow performing  workloads and troubleshoot it.
 
-       ![](media/ceo-zipkin-show-traces.png)
+       ![Trace data](media/ceo-zipkin-show-traces.png)
   
        You can view raw data on your Kibana dashboard too. Open Kibana using the `http://<node-ip>:<node-port>` and commence with defining a *zipkin* index pattern.
        
        Use the `timestamp_millis` field as the timestamp field. After creating the index pattern, click the **Discover** tab and you can view the trace information collected by Zipkin.
 
-       ![](media/coe-zipkin-traces.png)
+       ![Zipkin traces](media/coe-zipkin-traces.png)
 
-        For information on troubleshooting related to Citrix ADC Observability Exporter, see [Citrix ADC CPX troubleshooting](https://docs.citrix.com/en-us/citrix-adc-cpx/current-release/cpx-troubleshooting.html).
+      For information on troubleshooting related to Citrix ADC Observability Exporter, see [Citrix ADC CPX troubleshooting](https://docs.citrix.com/en-us/citrix-adc-cpx/current-release/cpx-troubleshooting.html).
