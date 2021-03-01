@@ -89,7 +89,7 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
   
       For example, from Step 1, access http://10.102.40.41:30176/ in which, `10.102.40.41` is one of the Kubernetes node IPs.
 
-      ![](media/coe-es-send-requests.png)
+      ![Requests](media/coe-es-send-requests.png)
   
   3.  Access Kibana with a browser using the URL: `https://<kubernetes-node-IP>:<kibana nodeport>/`.
 
@@ -97,27 +97,27 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
    
       a. Click **Explore on my own**.
 
-         ![](media/coe-es-click-explore.png)
+       ![Explore](media/coe-es-click-explore.png)
 
       b. Click **Connect to your Elasticsearch index**.
 
-         ![](media/coe-es-connect-to-index.png)
+        ![Connect to Elastic index](media/coe-es-connect-to-index.png)
 
       c. Click **Saved Objects**.
    
       d. Download and import the Kibana Dashboard from [KibanaAppTrans.ndjson](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/dashboards/KibanaAppTrans.ndjson).
    
-        ![](media/coe-es-saved-objects.png)
+       ![Saved objects](media/coe-es-saved-objects.png)
 
       e. Click **App Transaction dashboard**.
 
-         ![](media/coe-es-transact-dashboard.png)
+       ![Dashboard](media/coe-es-transact-dashboard.png)
 
-         The dashboard appears.
+        The dashboard appears.
 
-         ![](media/coe-es-indices-dashboard.png)
+       ![Dashboard](media/coe-es-indices-dashboard.png)
 
-         ![Elasticsearch indexes based on configuration](media/coe-es-indices-basedon-config.png)
+       ![Elasticsearch indexes based on configuration](media/coe-es-indices-basedon-config.png)
 
 ## Integrate Citrix ADC with multiple Citrix ADC Observability Exporter instances manually
 
@@ -170,7 +170,7 @@ To verify if Citrix ADC sends application data logs to Citrix ADC Observability 
 
   The counter value indicates that the number of application transactions (for example, HTTP transactions) which have been sent to Citrix ADC Observability Exporter.
 
-  ![](media/coe-es-counter-value.png)
+  ![Counter value](media/coe-es-counter-value.png)
 
   If the application traffic rate (for example, HTTP req/sec) that is sent to Citrix ADC Observability Exporter is not equal to `lstream_tot_trans_written`, you can verify the same using the following command:
 
@@ -183,13 +183,13 @@ To verify if Citrix ADC sends application data logs to Citrix ADC Observability 
       shell
       /netscaler/appflow/ns_ipfix.yaml
 
-  ![](media/coe-es-shell-ipfix.png)
+  ![Data location](media/coe-es-shell-ipfix.png)
 
   To verify that if application transaction records are exported from Citrix ADC to Citrix ADC Observability Exporter, use the following command:
 
     nsconmsg -g appflow_tmpl -d current
 
-  ![](media/coe-es-appflow-current.png)
+  ![Performance data](media/coe-es-appflow-current.png)
 
   Location of metrics data export logs to Citrix ADC for time series data:
 

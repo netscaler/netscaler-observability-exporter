@@ -4,7 +4,7 @@ You can configure Prometheus as an endpoint to pull data from Citrix ADC Observa
 
 Citrix ADC Observability Exporter has a push-gateway server that listens to port 5563 to serve metrics based on pull requests from Prometheus. Citrix ADC Observability Exporter exports time series data to Prometheus. 
 
-![](media/coe-prometheus-grafana-architecture.png)
+![Prometheus and Grafana architecture](media/coe-prometheus-grafana-architecture.png)
 
 ## Configure Citrix ADC Observability Exporter
 
@@ -117,7 +117,7 @@ In the current deployment, a Prometheus server has already been added as a data 
 
   You can modify the data and its representation in Grafana. For more information, see [Grafana Documentation](https://grafana.com/docs/grafana/latest/panels/panels-overview/).
 
-  ![](media/coe-prom-grafana-visualization.png)
+  ![Grafana dashboard](media/coe-prom-grafana-visualization.png)
 
   **Import pre-built dashboards for Grafana**
 

@@ -2,13 +2,13 @@
 
 Citrix ADC Observability Exporter is a container that collects metrics and transactions from Citrix ADC. It also transforms the data into the formats (such as AVRO) that are supported in Kafka and exports the data to the endpoint. Kafka is an open-source and distributed event streaming platform for high-performance data pipelines and streaming analytics.
 
-## Deploy Citrix Observability Exporter
+## Deploy Citrix ADC Observability Exporter
 
 You can deploy Citrix ADC Observability Exporter using the YAML file. Based on the Citrix ADC deployment, you can use Citrix ADC Observability Exporter to export metrics and transaction data from Citrix ADC. You can deploy Citrix ADC CPX either as a pod inside the Kubernetes cluster or on Citrix ADC MPX or VPX form factor outside the cluster.
 
 The following diagram illustrates a Citrix ADC as an Ingress Gateway with Citrix ADC Observability Exporter as a sidecar. It sends Citrix ADC application transaction data to Kafka.
 
-![Citrix Observability Exporter Deployment](media/coe-kafka-architecture.png)
+![Citrix ADC Observability Exporter Deployment](media/coe-kafka-architecture.png)
 
 ### Prerequisites
 
@@ -56,7 +56,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
   
   **Note**: If you have used a different namespace, other than *default*, then you must change from `coe-kafka.default.svc.cluster.local` to `coe-kafka.<desired-namespace>.svc.cluster.local`.
 
-  ## Deploy Citrix ADC Observability Exporter using YAML
+## Deploy Citrix ADC Observability Exporter using YAML
 
 You can deploy Citrix ADC Observability Exporter using the YAML file. Download the [coe-kafka.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/kafka/coe-kafka.yaml) file that you can use for the Citrix ADC Observability Exporter deployment.
 
@@ -196,7 +196,7 @@ To edit the YAML file for the required changes, perform the following steps:
               protocol: TCP
           selector:
               app: coe-kafka
-          ```
+        ```
 
 ## Verify the Citrix ADC Observability Exporter deployment
 
@@ -212,7 +212,7 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
   
         For example, from step 1, access http://10.102.61.56:31202/ in which, `10.102.61.56` is one of the Kubernetes node IPs.
 
-      ![](media/coe-kafka-http-methods.png)
+      ![HTTP methods](media/coe-kafka-http-methods.png)
   
   3.  Use Kafka Consumer to view the transaction data. Access kafka Consumer from [PythonKafkaConsumer](https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html).
   
