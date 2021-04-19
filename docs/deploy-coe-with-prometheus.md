@@ -14,6 +14,17 @@ You can deploy Citrix ADC Observability Exporter using the YAML file. Based on y
 
   -  Ensure that you have a Kubernetes cluster with kube-dns or CoreDNS addon enabled.
 
+Deploying Citrix ADC Observability Exporter with the Prometheus endpoint includes the following tasks:
+
+- Deploy a sample application
+- Deploy Citrix ADC CPX with support enabled for Citrix ADC Observability Exporter
+- Deploy Prometheus and Grafana using YAML files
+- Deploy Citrix ADC Observability Exporter using the YAML file
+- Configure Citrix ADC to export metrics (optional)
+- Configure Prometheus (optional) to pull telemetry data
+- Configure Grafana
+- Create Grafana visualization
+
 ### Deploy a sample application
 
 The following is an example procedure for deploying a sample webserver application.
@@ -38,7 +49,7 @@ The following is an example procedure for deploying a sample webserver applicati
 
       For more information about Annotations, see [Ingress annotations help](https://github.com/citrix/citrix-k8s-ingress-controller/blob/666d6267e5b09683740528c5e8dd46f16d7d16e0/docs/configure/annotations.md).
 
-### Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support
+### Deploy Citrix ADC CPX with support enabled for Citrix ADC Observability Exporter
 
 You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Exporter support enabled along with Citrix ingress controller. You can modify the Citrix ADC CPX YAML file `cpx-ingress-es.yaml` to include the configuration information that is required for the Citrix ADC Observability Exporter support.
 
