@@ -76,7 +76,7 @@ To deploy Prometheus and Grafana using YAML files, perform the following steps:
   
 ### Configure Citrix ADC to export metrics (optional)
 
-  **Note**: If you do not use CIC to configure, then you can do the following manual configuration on your Citric ADC.
+  **Note**: If you do not use CIC to configure, then you can do the following manual configuration on your Citrix ADC.
 
   You can manually configure Citrix ADCs to export metrics to the Citrix ADC Observability exporter. Specify the Citrix ADC Observability Exporter IP/FQDN address as an HTTP service and combine it to the default `ns_analytics_time_series_profile` analytics profile. Enable the metrics export and set the output mode to Prometheus.
   
