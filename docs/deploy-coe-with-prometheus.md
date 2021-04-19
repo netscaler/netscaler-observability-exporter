@@ -6,7 +6,7 @@ Citrix ADC Observability Exporter has a push-gateway server that listens to port
 
 ![Prometheus and Grafana architecture](media/coe-prometheus-grafana-architecture.png)
 
-## Configure Citrix ADC Observability Exporter
+## Deploy Citrix ADC Observability Exporter
 
 You can deploy Citrix ADC Observability Exporter using the YAML file. Based on your Citrix ADC deployment, deploy Citrix ADC Observability Exporter either outside or inside Kubernetes clusters. You can deploy Citrix ADC Observability Exporter as a pod inside the Kubernetes cluster or on Citrix ADC MPX or VPX appliance outside the cluster.
 
@@ -14,9 +14,9 @@ You can deploy Citrix ADC Observability Exporter using the YAML file. Based on y
 
   -  Ensure that you have a Kubernetes cluster with kube-dns or CoreDNS addon enabled.
 
-In the following procedure, the YAML file is used to deploy Citrix ADC Observability Exporter in the Kubernetes *defauIt* namespace. If you want to deploy in a private namespace other than the *default*, edit the YAML file to specify the namespace.
+### Deploy a sample application
 
-Perform the following steps to deploy a sample webserver application:
+The following is an example procedure for deploying a sample webserver application.
 
 **Note**: If you have a pre-deployed web application, skip the steps from step 1 to step 3.
 
@@ -38,7 +38,7 @@ Perform the following steps to deploy a sample webserver application:
 
       For more information about Annotations, see [Ingress annotations help](https://github.com/citrix/citrix-k8s-ingress-controller/blob/666d6267e5b09683740528c5e8dd46f16d7d16e0/docs/configure/annotations.md).
 
-## Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support
+### Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support
 
 You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Exporter support enabled along with Citrix ingress controller. You can modify the Citrix ADC CPX YAML file `cpx-ingress-es.yaml` to include the configuration information that is required for the Citrix ADC Observability Exporter support.
 
@@ -52,7 +52,7 @@ You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Ex
   
   **Note**: If you have used a namespace other than *default*, change `coe-prometheus.default.svc.cluster.local to` to `coe-prometheus.<desired-namespace>.svc.cluster.local`.
 
-## Deploy Prometheus and Grafana using YAML files
+### Deploy Prometheus and Grafana using YAML files
 
 To deploy Prometheus and Grafana using YAML files, perform the following steps:
 
@@ -64,7 +64,7 @@ To deploy Prometheus and Grafana using YAML files, perform the following steps:
 
    **Note**: Prometheus and Grafana are deployed in the default namespace of the same Kubernetes cluster.
    
-## Deploy Citrix ADC Observability Exporter using the YAML file
+### Deploy Citrix ADC Observability Exporter using the YAML file
 
   You can deploy Citrix ADC Observability Exporter using the YAML file. Download the YAML file from [coe-prometheus.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/prometheus/coe-prometheus.yaml).
 
@@ -74,7 +74,7 @@ To deploy Prometheus and Grafana using YAML files, perform the following steps:
 
  **Note**: Modify the YAML file for Citrix ADC Observability Exporter if you have a custom namespace.
   
-## Configure Citrix ADC to export metrics (optional)
+### Configure Citrix ADC to export metrics (optional)
 
   **Note**: If you do not use CIC to configure, then you can do the following manual configuration on your Citric ADC.
 
@@ -86,7 +86,7 @@ To deploy Prometheus and Grafana using YAML files, perform the following steps:
     add service coe_metric_collector_svc_192.168.1.102 COE_instance HTTP 5563
     set analytics profile ns_analytics_time_series_profile -collector coe_metric_collector_svc_192.168.1.102 -Metrics ENABLED -OutputMode Prometheus
 
-## Configure Prometheus (optional) to pull telemetry data
+### Configure Prometheus (optional) to pull telemetry data
 
   Prometheus services are available as Docker images on [Quay container registry](https://quay.io/) and Docker Hub.
 
@@ -101,11 +101,11 @@ To deploy Prometheus and Grafana using YAML files, perform the following steps:
         static_configs:
           - targets: ['192.168.1.102:5563']
 
-## Configure Grafana
+### Configure Grafana
 
 In the current deployment, a Prometheus server has already been added as a data source. If you use an existing Prometheus server for the deployment, ensure to add the same as a data source on your Grafana. For more information, see [Grafana support for Prometheus](https://prometheus.io/docs/visualization/grafana/).
 
-## Create Grafana visualization
+### Create Grafana visualization
 
   You can create a Grafana dashboard and select the key metrics and the visualization type that is suitable for the data.
 
