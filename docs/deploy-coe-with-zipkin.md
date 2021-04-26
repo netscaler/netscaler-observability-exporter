@@ -57,7 +57,7 @@ To deploy a sample application with tracing enabled, perform the following steps
 
       **Note**: The parameters are predefined in the `watches-app-tracing.yaml` file.
 
-      For more information about annotations, see [Ingress annotations](https://github.com/citrix/citrix-k8s-ingress-controller/blob/666d6267e5b09683740528c5e8dd46f16d7d16e0/docs/configure/annotations.md).
+      For more information about annotations, see [Ingress annotations documentation](https://github.com/citrix/citrix-k8s-ingress-controller/blob/666d6267e5b09683740528c5e8dd46f16d7d16e0/docs/configure/annotations.md).
 
 ## Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support
 

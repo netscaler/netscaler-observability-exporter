@@ -47,7 +47,7 @@ The following is an example procedure for deploying a sample webserver applicati
 
       **Note**: The parameters are predefined in the `webserver-es.yaml` file.
 
-      For more information about Annotations, see [Ingress annotations help](https://github.com/citrix/citrix-k8s-ingress-controller/blob/666d6267e5b09683740528c5e8dd46f16d7d16e0/docs/configure/annotations.md).
+      For more information about Annotations, see [Ingress annotations documentation](https://github.com/citrix/citrix-k8s-ingress-controller/blob/666d6267e5b09683740528c5e8dd46f16d7d16e0/docs/configure/annotations.md).
 
 ### Deploy Citrix ADC CPX with support enabled for Citrix ADC Observability Exporter
 
