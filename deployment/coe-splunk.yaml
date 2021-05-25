@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coe-config-splunk
+data:
+  lstreamd_default.conf: |
+  {
+    "Endpoints": {
+      "SPLUNK": {
+        "ServerUrl": "",
+        "AuthToken": "",
+        "IndexPrefix": "",
+        "RecordType": {
+          "HTTP": "all",
+          "TCP": "all",
+          "SWG": "all",
+          "VPN": "all",
+          "NGS": "all",
+          "ICA": "all",
+          "APPFW": "none",
+          "BOT": "all",
+          "VIDEOOPT": "none",
+          "BURST_CQA": "none",
+          "SLA": "none",
+          "MONGO": "none"
+        },
+        "TimeSeries": {
+          "EVENTS": "no",
+          "AUDITLOGS": "no"
+        },
+        "ProcessAlways": "no",
+        "ProcessYieldTimeOut": "500",
+        "MaxConnections": "512",
+        "JsonFileDump": "no"           
+      }
+    }
+  }
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coe-splunk
+  labels: 
+    app: coe-splunk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coe-splunk
+  template:
+    metadata:
+      name: coe-splunk
+      labels:
+        app: coe-splunk
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5563"
+    spec:
+      containers:
+        - name: coe-splunk
+          image: "quay.io/citrix/citrix-observability-exporter:1.3.001"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5557
+              name: lstream
+            - containerPort: 5563
+              name: rest
+          volumeMounts:
+            - name: lstreamd-config-splunk
+              mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
+              subPath: lstreamd_default.conf
+            - name: core-data
+              mountPath: /cores/
+      volumes:
+        - name: lstreamd-config-splunk
+          configMap:
+            name: coe-config-splunk
+        - name: core-data
+          emptyDir: {}
+---
+# Citrix-observability-exporter headless service  
+apiVersion: v1
+kind: Service
+metadata:
+  name: coe-splunk
+  labels:
+    app: coe-splunk
+spec:
+  clusterIP: None
+  ports:
+    - port: 5557
+      protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
+  selector:
+      app: coe-splunk
+---
+# Citrix-observability-exporter NodePort service
+apiVersion: v1
+kind: Service
+metadata:
+  name: coe-splunk-nodeport
+  labels:
+    app: coe-splunk
+spec:
+  type: NodePort
+  ports:
+    - port: 5557
+      protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
+  selector: 
+      app: coe-splunk

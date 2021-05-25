@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+spec:
+  selector:
+    matchLabels:
+      app: webserver
+  replicas: 1
+  template:
+    metadata:
+      name: webserver
+      labels:
+        app: webserver
+    spec:
+      containers:
+      - name: webserver
+        image: "kennethreitz/httpbin"
+        imagePullPolicy: Always
+        ports:
+        - name: webserver-80
+          containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver
+  labels:
+    app: webserver
+spec:
+  type: NodePort
+  ports:
+  - name: webserver-80
+    port: 80
+  selector:
+    app: webserver
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webserver-ingress
+  annotations:
+   ingress.citrix.com/insecure-termination: "allow"
+   kubernetes.io/ingress.class: "webserver-ingress"
+   ingress.citrix.com/analyticsprofile: '{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED", "httphost":"ENABLED", "httpmethod":"ENABLED", "httpcontenttype":"ENABLED"}, "tcpinsight": {"tcpBurstReporting":"DISABLED"}}'
+spec:
+      tls:
+       - secretName: 
+      rules:
+       - http:
+          paths:
+          - path: /
+            backend:
+              serviceName: webserver
+              servicePort: 80

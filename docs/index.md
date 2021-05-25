@@ -10,7 +10,6 @@
  - [Kafka](https://kafka.apache.org/)
  - [Elasticsearch](https://www.elastic.co/products/elasticsearch)
  - [Prometheus](https://prometheus.io/docs/introduction/overview/)
- - [Splunk Enterprise](https://www.splunk.com/en_us/software/splunk-enterprise/features.html)
 
 ## Overview
 
@@ -32,7 +31,6 @@ Citrix ADC Observability Exporter supports collecting transactions and streaming
 
 Citrix ADC Observability Exporter supports collecting time series data (metrics) from Citrix ADC instances and exports them to Prometheus. Prometheus is a monitoring solution for storing time series data like metrics. You can then add Prometheus as a data source to Grafana and graphically view the Citrix ADC metrics and analyze the metrics.
 
-
 ## How does Citrix ADC Observability Exporter work
 
 ### Distributed tracing with Zipkin using Citrix ADC Observability Exporter
@@ -52,10 +50,6 @@ When Kafka is specified as the transaction endpoint, Citrix ADC Observability Ex
 ### Citrix ADC Observability Exporter with Prometheus as the endpoint for time series data
 
 When Prometheus is specified as the format for time series data, Citrix ADC Observability Exporter collects various metrics from Citrix ADCs and converts them to appropriate Prometheus format and exports them to the Prometheus server. These metrics include counters of the virtual servers, services to which the analytics profile is bound and global counters of HTTP, TCP and so on.
-
-### Citrix ADC Observability Exporter with Splunk Enterprise as the endpoint for audit logs, events, and transactions 
-
-When Splunk Enterprise is specified as the format for data, Citrix ADC Observability Exporter collects various indexes and audit logs from Citrix ADCs and converts them to appropriate format and exports them to the Splunk Enterprise. Splunk Enterprise captures indexes and correlates real-time data in a repository from which it can generate reports, graphs, dashboards, and visualizations. Splunk Enterprise provides a graphical representation of these data. 
 
 ## Deployment
 
