@@ -139,7 +139,7 @@ To edit the YAML file for the required changes, perform the following steps:
                     - "kafka-node3"
               containers:
                 - name: coe-kafka
-                  image: "quay.io/citrix/citrix-observability-exporter:1.2.001"
+                  image: "quay.io/citrix/citrix-observability-exporter:1.3.001"
                   imagePullPolicy: Always
                   ports:
                     - containerPort: 5557
