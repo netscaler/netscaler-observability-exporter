@@ -56,7 +56,7 @@ spec:
     spec:
       containers:
         - name: coe-es
-          image: "quay.io/citrix/citrix-observability-exporter:1.2.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.3.001"
           imagePullPolicy: Always
           securityContext:
             privileged: true
