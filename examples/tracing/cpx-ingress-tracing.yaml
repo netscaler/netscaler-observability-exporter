@@ -85,7 +85,7 @@ spec:
       serviceAccountName: cpx-ingress-k8s-role
       containers:
         - name: cpx-ingress-zipkin
-          image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-64.35"
+          image: "quay.io/citrix/citrix-k8s-cpx-ingress:13.0-76.29"
           volumeMounts:
             - mountPath: /var/deviceinfo
               name: shared-data
@@ -99,7 +99,7 @@ spec:
           imagePullPolicy: Always
         # Add cic as a sidecar
         - name: cic
-          image: "quay.io/citrix/citrix-k8s-ingress-controller:1.9.9"
+          image: "quay.io/citrix/citrix-k8s-ingress-controller:1.13.20"
           volumeMounts:
             - mountPath: /var/deviceinfo
               name: shared-data
@@ -126,9 +126,10 @@ spec:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.namespace
+          envFrom:
+          - configMapRef:
+              name: cic-configmap
           args:
-            - --configmap
-              default/cic-configmap
             - --ingress-classes
               watches-ingress
           imagePullPolicy: Always
