@@ -22,3 +22,5 @@ Citrix ADC Observability Exporter supports the following endpoints: Kafka, Elast
   -  [Deploy Citrix ADC Observability Exporter with Elasticsearch](deploy-coe-with-es.md)
 
   -  [Deploy Citrix ADC Observability Exporter with Kafka](deploy-coe-with-Kafka.md)
+
+  -  [Deploy Citrix ADC Observability Exporter with Splunk](deploy-coe-with-splunk.md)

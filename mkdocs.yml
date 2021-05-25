@@ -82,4 +82,5 @@ nav:
     -  Citrix ADC Observability Exporter with Prometheus and Grafana: deploy-coe-with-prometheus.md
     -  Citrix ADC Observability Exporter with Elasticsearch: deploy-coe-with-es.md
     -  Citrix ADC Observability Exporter with Kafka: deploy-coe-with-Kafka.md
+    -  Citrix ADC Observability Exporter with Splunk Enterprise: deploy-coe-with-splunk.md
   - Troubleshooting: coe-troubleshooting.md
