@@ -9,7 +9,7 @@ data:
       "SPLUNK": {
         "ServerUrl": "",
         "AuthToken": "",
-        "IndexPrefix": "",
+        "Index": "",
         "RecordType": {
           "HTTP": "all",
           "TCP": "all",
