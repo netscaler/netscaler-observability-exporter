@@ -50,7 +50,12 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
           server: 'coe-es.default.svc.cluster.local' # COE service FQDN
   
-   **Note**: If you have used a namespace other than *default*, change `coe-es.default.svc.cluster.local to` to `coe-es.<desired-namespace>.svc.cluster.local`. If ADC is outside the Kubernetes cluster, then you must specify IP address and nodport address of Citrix ADC Observability Exporter.
+       **Note**: If you have used a namespace other than *default*, change `coe-es.default.svc.cluster.local to` to `coe-es.<desired-namespace>.svc.cluster.local`. If ADC is outside the Kubernetes cluster, then you must specify IP address and nodport address of Citrix ADC Observability Exporter.
+
+  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+
+          kubectl create -f cpx-ingress-tracing.yaml
+          kubectl create -f cic-configmap.yaml
 
 ## Deploy Elasticsearch and Kibana using YAML files
 

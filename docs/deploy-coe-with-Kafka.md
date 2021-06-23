@@ -53,7 +53,12 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
   3.  Edit the `cic-configmap.yaml` file and specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
 
           server: 'coe-kafka.default.svc.cluster.local' # COE service FQDN
-  
+
+  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+
+          kubectl create -f cpx-ingress-tracing.yaml
+          kubectl create -f cic-configmap.yaml
+
   **Note**: If you have used a different namespace, other than *default*, then you must change from `coe-kafka.default.svc.cluster.local` to `coe-kafka.<desired-namespace>.svc.cluster.local`.
 
 ## Deploy Citrix ADC Observability Exporter using YAML
@@ -66,137 +71,137 @@ To deploy Citrix ADC Observability Exporter using the Kubernetes YAML, run the f
 
 To edit the YAML file for the required changes, perform the following steps:
 
-  1.  Edit the ConfigMap using the following YAML definition: 
+1.  Edit the ConfigMap using the following YAML definition: 
   
-      **Note**: Ensure that you specify the Kafka broker IP and the Kafka desired topic.
+    **Note**: Ensure that you specify the Kafka broker IP and the Kafka desired topic.
 
-        ```yml
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: coe-config-kafka
-        data:
-          lstreamd_default.conf: |
-            {
-                "Endpoints": {
-                  "KAFKA": {
-                    "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
-                    "KafkaTopic": "HTTP", #Specify the desired kafka topic
-                    "RecordType": {
-                        "HTTP": "all",
-                        "TCP": "all",
-                        "SWG": "all",
-                        "VPN": "all",
-                        "NGS": "all",
-                        "ICA": "all",
-                        "APPFW": "none",
-                        "BOT": "none",
-                        "VIDEOOPT": "none",
-                        "BURST_CQA": "none",
-                        "SLA": "none",
-                        "MONGO": "none"
-                    },
-                    "ProcessAlways": "yes",
-                    "FileSizeMax": "40",
-                    "ProcessYieldTimeOut": "500",
-                    "FileStorageLimit": "1000",
-                    "SkipAvro": "no",
-                    "AvroCompress": "yes"
-                  }
-              }
+ ```yml
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: coe-config-kafka
+  data:
+    lstreamd_default.conf: |
+      {
+          "Endpoints": {
+            "KAFKA": {
+              "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
+              "KafkaTopic": "HTTP", #Specify the desired kafka topic
+              "RecordType": {
+                  "HTTP": "all",
+                  "TCP": "all",
+                  "SWG": "all",
+                  "VPN": "all",
+                  "NGS": "all",
+                  "ICA": "all",
+                  "APPFW": "none",
+                  "BOT": "none",
+                  "VIDEOOPT": "none",
+                  "BURST_CQA": "none",
+                  "SLA": "none",
+                  "MONGO": "none"
+              },
+              "ProcessAlways": "yes",
+              "FileSizeMax": "40",
+              "ProcessYieldTimeOut": "500",
+              "FileStorageLimit": "1000",
+              "SkipAvro": "no",
+              "AvroCompress": "yes"
             }
-        ---
-        ```
+        }
+      }
+  ---
+  ```
   2.  Specify the host name and IP or FQDN address of the Kafka nodes. Use the following YAML definition for a three node Kafka cluster:
 
-        ```yml
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: coe-kafka
-          labels:
-            app: coe-kafka
-        spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              app: coe-kafka
-          template:
-            metadata:
-              name: coe-kafka
-              labels:
-                app: coe-kafka
-            spec:
-              hostAliases:
-                - ip: "X.X.X.X" # Here we specify kafka node1 Ipaddress
-                  hostnames:
-                    - "kafka-node1"
-                - ip: "Y.Y.Y.Y" # Here we specify kafka node2 Ipaddress
-                  hostnames:
-                    - "kafka-node2"
-                - ip: "Z.Z.Z.Z" # Here we specify kafka node3 Ipaddress
-                  hostnames:
-                    - "kafka-node3"
-              containers:
-                - name: coe-kafka
-                  image: "quay.io/citrix/citrix-observability-exporter:1.3.001"
-                  imagePullPolicy: Always
-                  ports:
-                    - containerPort: 5557
-                      name: lstream
-                  volumeMounts:
-                    - name: lstreamd-config-kafka
-                      mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
-                      subPath: lstreamd_default.conf
-                    - name: core-data
-                      mountPath: /cores/
-              volumes:
-                - name: lstreamd-config-kafka
-                  configMap:
-                    name: coe-config-kafka
-                - name: core-data
-                  emptyDir: {}
-        ---
-        ```
+  ```yml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: coe-kafka
+    labels:
+      app: coe-kafka
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: coe-kafka
+    template:
+      metadata:
+        name: coe-kafka
+        labels:
+          app: coe-kafka
+      spec:
+        hostAliases:
+          - ip: "X.X.X.X" # Here we specify kafka node1 Ipaddress
+            hostnames:
+              - "kafka-node1"
+          - ip: "Y.Y.Y.Y" # Here we specify kafka node2 Ipaddress
+            hostnames:
+              - "kafka-node2"
+          - ip: "Z.Z.Z.Z" # Here we specify kafka node3 Ipaddress
+            hostnames:
+              - "kafka-node3"
+        containers:
+          - name: coe-kafka
+            image: "quay.io/citrix/citrix-observability-exporter:1.3.001"
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 5557
+                name: lstream
+            volumeMounts:
+              - name: lstreamd-config-kafka
+                mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
+                subPath: lstreamd_default.conf
+              - name: core-data
+                mountPath: /cores/
+        volumes:
+          - name: lstreamd-config-kafka
+            configMap:
+              name: coe-config-kafka
+          - name: core-data
+            emptyDir: {}
+  ---
+  ```
 
   3.  If necessary, edit the Service configuration for exposing the Citrix ADC Observability Exporter port to Citrix ADC using the following YAML definition:
 
-      **Citrix-observability-exporter headless service**
+  **Citrix-observability-exporter headless service**
 
-        ```yml
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: coe-kafka
-          labels:
-            app: coe-kafka
-        spec:
-          clusterIP: None
-          ports:
-            - port: 5557
-              protocol: TCP
-          selector:
-              app: coe-kafka
-        ---
-        ```
+  ```yml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: coe-kafka
+    labels:
+      app: coe-kafka
+  spec:
+    clusterIP: None
+    ports:
+      - port: 5557
+        protocol: TCP
+    selector:
+        app: coe-kafka
+  ---
+  ```
 
-      **Citrix-observability-exporter NodePort service**
+**Citrix-observability-exporter NodePort service**
     
-        ```yml
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: coe-kafka-nodeport
-          labels:
-            app: coe-kafka
-        spec:
-          type: NodePort
-          ports:
-            - port: 5557
-              protocol: TCP
-          selector:
-              app: coe-kafka
-        ```
+  ```yml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: coe-kafka-nodeport
+    labels:
+      app: coe-kafka
+  spec:
+    type: NodePort
+    ports:
+      - port: 5557
+        protocol: TCP
+    selector:
+        app: coe-kafka
+  ```
 
 ## Verify the Citrix ADC Observability Exporter deployment
 
