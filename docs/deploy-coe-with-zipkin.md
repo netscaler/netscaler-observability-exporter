@@ -69,9 +69,6 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
   1.  Download the [cpx-ingress-tracing.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/tracing/cpx-ingress-tracing.yaml) and [cic-configmap.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/elasticsearch/cic-configmap.yaml) file.
 
-          kubectl create -f cpx-ingress-tracing.yaml
-          kubectl create -f cic-configmap.yaml
-
   2.  Modify Citrix ADC CPX related parameters, as required. For example, add lines under `args` in the `cpx-ingress-tracing.yaml` file as following:
 
           args:
@@ -82,6 +79,11 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
           server: 'coe-zipkin.default.svc.cluster.local' # COE service FQDN
   
+  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+
+          kubectl create -f cpx-ingress-tracing.yaml
+          kubectl create -f cic-configmap.yaml
+          
   **Note**: If you have used a namespace other than *default*, change `coe-zipkin.default.svc.cluster.local` to `coe-zipkin.<desired-namespace>.svc.cluster.local`. If ADC is outside the Kubernetes cluster, then you must specify IP address and Nodport address of Citrix ADC Observability Exporter.
 
 ## Deploy Zipkin, Elasticsearch, and Kibana using YAML files

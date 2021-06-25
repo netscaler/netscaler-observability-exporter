@@ -61,7 +61,12 @@ You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Ex
 
           server: 'coe-prometheus.default.svc.cluster.local' # COE service FQDN
   
-  **Note**: If you have used a namespace other than *default*, change `coe-prometheus.default.svc.cluster.local to` to `coe-prometheus.<desired-namespace>.svc.cluster.local`.
+      **Note**: If you have used a namespace other than *default*, change `coe-prometheus.default.svc.cluster.local to` to `coe-prometheus.<desired-namespace>.svc.cluster.local`.
+
+  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+
+          kubectl create -f cpx-ingress-tracing.yaml
+          kubectl create -f cic-configmap.yaml
 
 ### Deploy Prometheus and Grafana using YAML files
 
