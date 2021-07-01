@@ -1,3 +1,4 @@
+lelntvkvec
 # Citrix ADC Observability Exporter
 
  Citrix ADC Observability Exporter is a container which collects metrics and transactions from Citrix ADCs and transforms them to suitable formats (such as JSON, AVRO) for [supported endpoints](#Supported-Endpoints). You can export the data collected by Citrix Observability Exporter to the desired endpoint. By analyzing the data exported to the endpoint, you can get valuable insights at a microservices level for applications proxied by Citrix ADCs.
@@ -60,7 +61,7 @@ When Splunk Enterprise is specified as the format for data, Citrix ADC Observabi
 
 ## Deployment
 
-You can deploy Citrix ADC Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix ADC Observability Exporter using Kubernetes YAML, see [Deployment](deployment/README.md).
+You can deploy Citrix ADC Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix ADC Observability Exporter using Kubernetes YAML, see [Deployment](https://github.com/citrix/citrix-observability-exporter/blob/master/deployment/README.md).
 
 ## Questions
 
