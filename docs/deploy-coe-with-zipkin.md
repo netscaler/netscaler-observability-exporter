@@ -37,7 +37,7 @@ To deploy Citrix ADC Observability Exporter with Zipkin, you must perform the fo
 
 ## Deploy application with tracing enabled
 
-To deploy a sample application with tracing enabled, perform the following steps:
+The following is a sample application deployment with tracing enabled.
 
 **Note**: If you have a pre-deployed web application, skip the steps 1 and 2.
 

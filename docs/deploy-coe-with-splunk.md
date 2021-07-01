@@ -46,7 +46,7 @@ Perform the following steps to deploy Citrix ADC Observability Exporter:
 
 You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Exporter support enabled along with Citrix ingress controller. You can modify the Citrix ADC CPX YAML file `cpx-ingress-splunk.yaml` to include the configuration information that is required for the Citrix ADC Observability Exporter support.
 
-Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix ADC Observability Exporter support:
+The following is a sample application deployment procedure.
 
   1.  Download the [cpx-ingress-splunk.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/splunk/cpx-ingress-splunk.yaml) and [cic-configmap.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/splunk/cic-configmap.yaml) file.
   2.  Modify Citrix ADC CPX related parameters, as required.
@@ -58,7 +58,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
   4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
 
-          kubectl create -f cpx-ingress-tracing.yaml
+          kubectl create -f cpx-ingress-splunk.yaml
           kubectl create -f cic-configmap.yaml
 
 ## Deploy Citrix ADC Observability Exporter using the YAML file

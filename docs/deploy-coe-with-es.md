@@ -16,7 +16,7 @@ The following diagram illustrates a Citrix ADC as an Ingress Gateway with the Ci
 
 In the following procedure, the YAML file is used to deploy Citrix ADC Observability Exporter in the Kubernetes *defauIt* namespace. If you want to deploy in a private namespace other than the *default*, edit the YAML file to specify the namespace.
 
-Perform the following steps to deploy Citrix Observability Exporter:
+The following is a sample application deployment procedure.
 
 **Note**: If you have a pre-deployed web application, skip the steps 1 and 2.
 
@@ -54,7 +54,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix 
 
   4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
 
-          kubectl create -f cpx-ingress-tracing.yaml
+          kubectl create -f cpx-ingress-es.yaml
           kubectl create -f cic-configmap.yaml
 
 ## Deploy Elasticsearch and Kibana using YAML files
