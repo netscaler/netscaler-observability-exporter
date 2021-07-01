@@ -75,7 +75,7 @@ To edit the YAML file for the required changes, perform the following steps:
   
     **Note**: Ensure that you specify the Kafka broker IP and the Kafka desired topic.
 
-  ```yml
+    ```yml
     apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -111,10 +111,10 @@ To edit the YAML file for the required changes, perform the following steps:
           }
         }
     ---
-  ```
-  2.  Specify the host name and IP or FQDN address of the Kafka nodes. Use the following YAML definition for a three node Kafka cluster:
+    ```
+2.  Specify the host name and IP or FQDN address of the Kafka nodes. Use the following YAML definition for a three node Kafka cluster:
 
-  ```yml
+    ```yml
     apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -161,14 +161,13 @@ To edit the YAML file for the required changes, perform the following steps:
                 name: coe-config-kafka
             - name: core-data
               emptyDir: {}
-    ---
-  ```
+    ```
 
-  3.  If necessary, edit the Service configuration for exposing the Citrix ADC Observability Exporter port to Citrix ADC using the following YAML definition:
+3.  If necessary, edit the Service configuration for exposing the Citrix ADC Observability Exporter port to Citrix ADC using the following YAML definition:
 
-  **Citrix-observability-exporter headless service**
+    **Citrix-observability-exporter headless service**
 
-  ```yml
+    ```yml
     apiVersion: v1
     kind: Service
     metadata:
@@ -183,11 +182,11 @@ To edit the YAML file for the required changes, perform the following steps:
       selector:
           app: coe-kafka
     ---
-  ```
+    ```
 
-**Citrix-observability-exporter NodePort service**
+    **Citrix-observability-exporter NodePort service**
     
-  ```yml
+    ```yml
     apiVersion: v1
     kind: Service
     metadata:
@@ -201,7 +200,7 @@ To edit the YAML file for the required changes, perform the following steps:
           protocol: TCP
       selector:
           app: coe-kafka
-  ```
+    ```
 
 ## Verify the Citrix ADC Observability Exporter deployment
 
