@@ -60,7 +60,7 @@ When Splunk Enterprise is specified as the format for data, Citrix ADC Observabi
 
 ## Deployment
 
-You can deploy Citrix ADC Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix ADC Observability Exporter using Kubernetes YAML, see [Deployment](https://github.com/citrix/citrix-observability-exporter/blob/master/deployment/README.md).
+You can deploy Citrix ADC Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix ADC Observability Exporter using Kubernetes YAML, see [Deployment](https://github.com/citrix/citrix-observability-exporter/blob/master/docs/deploy-coe.md).
 
 ## Questions
 
