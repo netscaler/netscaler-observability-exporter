@@ -72,6 +72,10 @@ For questions and support, the following channels are available:
   
 To request an invitation to participate in the Slack channel, provide your email address using this form: [https://podio.com/webforms/22979270/1633242](https://podio.com/webforms/22979270/1633242)
 
+For more information about Citrix cloud native solutions, you can reach out to the Citrix product team at: AppModernization@citrix.com
+
+![ ](media/contact-product-team.png)
+
 ## Issues
 
 Describe issues in detail, collect logs, and use the [discussion forum](https://discussions.citrix.com/forum/1657-netscaler-cpx/) to raise the issue.
