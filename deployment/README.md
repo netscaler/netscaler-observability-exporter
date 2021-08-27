@@ -22,7 +22,7 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
     - [Kibana](https://www.elastic.co/products/kibana) is required to visualize your tracing data.
 
 **Note:**
-    You can use [zipkin.yaml](../examples/zipkin.yaml), [elasticsearch.yaml](../examples/elasticsearch.yaml), and [kibana.yaml](../examples/kibana.yaml) for installing Zipkin, Elasticsearch, and Kibana.
+    You can use [zipkin.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/tracing/zipkin.yaml), [elasticsearch.yaml]( https://github.com/citrix/citrix-observability-exporter/blob/master/examples/elasticsearch/elasticsearch.yaml), and [kibana.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/elasticsearch/kibana.yaml) for installing Zipkin, Elasticsearch, and Kibana.
 
 - If Elasticsearch is used as the endpoint for transactions, ensure that you have Elasticsearch installed and configured.
 - If Kafka is used as the endpoint for transactions, ensure that the Kafka server is installed and configured.
@@ -112,7 +112,7 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
     - For Kafka as the transaction endpoint: [cpx-ingress-kafka.yaml](../examples/kafka/cpx-ingress-kafka.yaml)
     - For Prometheus as the time series data endpoint: [cpx-ingress-prometheus.yaml](../examples/prometheus/cpx-ingress-prometheus.yaml)
 
-2. Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](../examples/cic-configmap.yaml) file or the one that is available within the endpoint example directory.
+2. Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the `cic-configmap.yaml` file that is available for specific the endpoint example at [Examples](https://github.com/citrix/citrix-observability-exporter/tree/master/examples) directory.
 
              kubectl create -f cic-configmap.yaml
 
@@ -156,13 +156,13 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
 
 You need to complete the [prerequisites](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#prerequisites) for deploying the Citrix ingress controller as a standalone pod.
 
-1. Download the [vpx-ingress.yaml](../examples/vpx-ingress.yaml) file.
+1. Download the [vpx-ingress.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/onprem-adc-vpx/vpx-ingress.yaml) file.
 
-1.  Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](../examples/cic-configmap.yaml) file.
+1.  Create and deploy a ConfigMap with the required key-value pairs in the ConfigMap. You can use the [cic-configmap.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/onprem-adc-vpx/cic-configmap.yaml) file.
 
              kubectl create -f cic-configmap.yaml
 
-2. Deploy the [vpx-ingress.yaml](../examples/vpx-ingress.yaml) file using the following command.
+2. Deploy the [vpx-ingress.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/onprem-adc-vpx/vpx-ingress.yaml) file using the following command.
 
         kubectl create -f vpx-ingress.yaml -n tracing
 
