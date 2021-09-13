@@ -32,7 +32,7 @@ To deploy Citrix ADC Observability Exporter with Zipkin, you must perform the fo
 
 1. Deploy the required application with the tracing support enabled.
 2. Deploy Citrix ADC CPX enabled with the Citrix Observability Exporter support.
-3. Deploy Zipkin, Elasticsearch, and Kibana using the YAML files.
+3. Deploy [Zipkin](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/tracing/zipkin.yaml), [Elasticsearch](https://github.com/citrix/citrix-observability-exporter/blob/master/examples/elasticsearch/elasticsearch.yaml), and [Kibana]( https://github.com/citrix/citrix-observability-exporter/blob/master/examples/elasticsearch/kibana.yaml) using the YAML files.
 4. Deploy Citrix Observability Exporter using the YAML file.
 
 ## Deploy application with tracing enabled
@@ -67,19 +67,21 @@ While deploying Citrix ADC CPX, you can modify the deployment YAML file `cpx-ing
 
 Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix ADC Observability Exporter support:
 
-  1.  Download the [cpx-ingress-tracing.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/tracing/cpx-ingress-tracing.yaml) and [cic-configmap.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/elasticsearch/cic-configmap.yaml) file.
+  1.  Download the [cpx-ingress-tracing.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/tracing/cpx-ingress-tracing.yaml) and `cic-configmap.yaml` file.
 
-  2.  Modify Citrix ADC CPX related parameters, as required. For example, add lines under `args` in the `cpx-ingress-tracing.yaml` file as following:
+  2.  Create a ConfigMap with the required key-value pairs and deploy the ConfigMap. You can use the `cic-configmap.yaml` file that is available, for the specific endpoint, in the [directory](https://github.com/citrix/citrix-observability-exporter/tree/master/examples).
+
+  3.  Modify Citrix ADC CPX related parameters, as required. For example, add lines under `args` in the `cpx-ingress-tracing.yaml` file as following:
 
           args:
             - --configmap
               default/cic-configmap
 
-  3.  Edit the `cic-configmap.yaml` file to specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
+  4.  Edit the `cic-configmap.yaml` file to specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
 
           server: 'coe-zipkin.default.svc.cluster.local' # COE service FQDN
   
-  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+  5.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
 
           kubectl create -f cpx-ingress-tracing.yaml
           kubectl create -f cic-configmap.yaml
