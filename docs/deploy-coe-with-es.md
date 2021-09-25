@@ -45,14 +45,15 @@ You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Ex
 Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix ADC Observability Exporter support:
 
   1.  Download the [cpx-ingress-es.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/elasticsearch/cpx-ingress-es.yaml) and [cic-configmap.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/elasticsearch/cic-configmap.yaml) file.
-  2.  Modify Citrix ADC CPX related parameters, as required.
-  3.  Edit the `cic-configmap.yaml` file and specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
+  2. Create a ConfigMap with the required key-value pairs and deploy the ConfigMap. You can use the `cic-configmap.yaml` file that is available, for the specific endpoint, in the [directory](https://github.com/citrix/citrix-observability-exporter/tree/master/examples).
+  3.  Modify Citrix ADC CPX related parameters, as required.
+  4.  Edit the `cic-configmap.yaml` file and specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
 
           server: 'coe-es.default.svc.cluster.local' # COE service FQDN
   
        **Note**: If you have used a namespace other than *default*, change `coe-es.default.svc.cluster.local to` to `coe-es.<desired-namespace>.svc.cluster.local`. If ADC is outside the Kubernetes cluster, then you must specify IP address and nodport address of Citrix ADC Observability Exporter.
 
-  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+  5.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
 
           kubectl create -f cpx-ingress-es.yaml
           kubectl create -f cic-configmap.yaml

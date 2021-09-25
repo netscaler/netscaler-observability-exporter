@@ -49,12 +49,13 @@ You can deploy Citrix ADC CPX as a side car with the Citrix ADC Observability Ex
 Perform the following steps to deploy a Citrix ADC CPX instance with the Citrix ADC Observability Exporter support:
 
   1.  Download the [cpx-ingress-kafka.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/kafka/cpx-ingress-kafka.yaml) and the [cic-configmap.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/kafka/cic-configmap.yaml) files.
-  2.  Modify Citrix ADC CPX related parameters, as required.
-  3.  Edit the `cic-configmap.yaml` file and specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
+  2. Create a ConfigMap with the required key-value pairs and deploy the ConfigMap. You can use the `cic-configmap.yaml` file that is available, for the specific endpoint, in the [directory](https://github.com/citrix/citrix-observability-exporter/tree/master/examples).
+  3.  Modify Citrix ADC CPX related parameters, as required.
+  4.  Edit the `cic-configmap.yaml` file and specify the following variables for Citrix ADC Observability Exporter in the `NS_ANALYTICS_CONFIG` endpoint configuration.
 
           server: 'coe-kafka.default.svc.cluster.local' # COE service FQDN
 
-  4.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
+  5.  Deploy Citrix ADC CPX with the Citrix ADC Observability Exporter support using the following commands:
 
           kubectl create -f cpx-ingress-kafka.yaml
           kubectl create -f cic-configmap.yaml
