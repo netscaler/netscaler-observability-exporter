@@ -1,4 +1,4 @@
-# Deploy Citrix Observability Exporter
+# Deploy Citrix Observability Exporter on Kubernetes
 
 This topic provides information on how to deploy Citrix Observability Exporter using Kubernetes YAML files.
 <!---
@@ -10,7 +10,6 @@ Based on your Citrix ADC deployment, you can use Citrix Observability Exporter t
 The following diagram shows a deployment of Citrix Observability Exporter with all the supported endpoints.
 
 ![Citrix Observability Exporter](../media/citrix-observability-exporter-deploy.png)
-
 
 ## Prerequisites
 
