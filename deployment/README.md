@@ -1,15 +1,15 @@
-# Deploy Citrix Observability Exporter on Kubernetes
+# Deploy Citrix ADC Observability Exporter on Kubernetes
 
-This topic provides information on how to deploy Citrix Observability Exporter using Kubernetes YAML files.
+This topic provides information on how to deploy Citrix ADC Observability Exporter using Kubernetes YAML files.
 <!---
 You can deploy Citrix Observability Exporter using Kubernetes YAML files or using Helm charts. 
 -->
 
-Based on your Citrix ADC deployment, you can use Citrix Observability Exporter to export metrics and transactions from Citrix ADC CPX, MPX, or VPX.
+Based on your Citrix ADC deployment, you can use Citrix ADC Observability Exporter to export metrics and transactions from Citrix ADC CPX, MPX, or VPX.
 
-The following diagram shows a deployment of Citrix Observability Exporter with all the supported endpoints.
+The following diagram shows a deployment of Citrix ADC Observability Exporter with all the supported endpoints.
 
-![Citrix Observability Exporter](../media/citrix-observability-exporter-deploy.png)
+![Citrix ADC Observability Exporter](../media/citrix-observability-exporter-deploy.png)
 
 ## Prerequisites
 
@@ -27,9 +27,9 @@ The following diagram shows a deployment of Citrix Observability Exporter with a
 - If Kafka is used as the endpoint for transactions, ensure that the Kafka server is installed and configured.
 - If Prometheus is used as the endpoint for time series data, ensure that Prometheus is installed and configured.
 
-## Deploy Citrix Observability Exporter using YAML
+## Deploy Citrix ADC Observability Exporter using YAML
 
-To deploy Citrix Observability Exporter using Kubernetes YAML, perform the following steps for the required endpoint:
+To deploy Citrix ADC Observability Exporter using Kubernetes YAML, perform the following steps for the required endpoint:
 
 1. Create a secret using the certificate [ingress.crt](../examples/ingress.crt) and key [ingress.key](../examples/ingress.key) provided. You can also use your own certificate and key.
 
@@ -54,55 +54,55 @@ You can specify the Zipkin server information in ConfigMap using environment var
 
                 ServerUrl=<ip-address> or <dns-name>
 
-   If you specify only the IP address, Citrix Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
+   If you specify only the IP address, Citrix ADC Observability Exporter considers the port as the default Zipkin port (9411) and takes the default upload path (`/api/v1/spans`).
 
   - Explicitly provide the tracer IP address or DNS name, port, and the upload path information:
        
                 ServerUrl=<ip-address>:<port>/api/v1/spans
 
-- For Citrix Observability Exporter with Elasticsearch as the endpoint:
+- For Citrix ADC Observability Exporter with Elasticsearch as the endpoint:
 
-   Deploy Citrix Observability Exporter using the [coe-es.yaml](coe-es.yaml) file.
+   Deploy Citrix ADC Observability Exporter using the [coe-es.yaml](coe-es.yaml) file.
    
         kubectl create -f coe-es.yaml
 
      Set the Elasticsearch server details in the `ServerUrl` environment variable either based on IP address or DNS name, along with port information.
 
-- For Citrix Observability Exporter with Kafka as the endpoint:
+- For Citrix ADC Observability Exporter with Kafka as the endpoint:
 
-   Deploy Citrix Observability Exporter using the [coe-kafka.yaml](coe-kafka.yaml) file
+   Deploy Citrix ADC Observability Exporter using the [coe-kafka.yaml](coe-kafka.yaml) file
    
         kubectl create -f coe-kafka.yaml
 
    Enable the Kafka endpoint by setting the Kafka broker details in the `ServerUrl` environment variable either based on IP address or DNS name, along with port information. Then specify the Kafka topic details in `KafkaTopic`. You also must specify the Kafka cluster host IP mapping under HostAliases in the [Kubernetes Pod specification](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/#adding-additional-entries-with-hostaliases).
 
-- For Citrix Observability Exporter with Prometheus as the endpoint for time series data:
+- For Citrix ADC Observability Exporter with Prometheus as the endpoint for time series data:
 
    You can enable Prometheus support by specifying the following annotations in the YAML files to deploy Zipkin, Kafka, or Elasticsearch and exposing the time series port. You need to also specify the time series parameter with metrics enable set as `true` and the mode set to `prometheus` in the respective `cic-configmap.yaml` file for the endpoint.
 
         prometheus.io/scrape: "true"
         prometheus.io/port: "5563"
 
-   The following command deploys Citrix Observability Exporter with both Elasticsearch and Prometheus as endpoints, using the [coe-es-prometheus.yaml](coe-es-prometheus.yaml) file. In this YAML file, annotations for Prometheus support are enabled and port 5563 is exposed which is used for the time series data.
+   The following command deploys Citrix ADC Observability Exporter with both Elasticsearch and Prometheus as endpoints, using the [coe-es-prometheus.yaml](coe-es-prometheus.yaml) file. In this YAML file, annotations for Prometheus support are enabled and port 5563 is exposed which is used for the time series data.
 
         kubectl create -f coe-es-prometheus.yaml
 
-   You should configure Prometheus to scrape the data from the Citrix Observability Exporter time series port. For enabling time series data processing, there is no specific configuration required on Citrix Observability Exporter. By default, if time series data is pushed to Citrix Observability Exporter, it is processed automatically. The time series port is enabled by default.
+   You should configure Prometheus to scrape the data from the Citrix ADC Observability Exporter time series port. For enabling time series data processing, there is no specific configuration required on Citrix ADC Observability Exporter. By default, if time series data is pushed to Citrix ADC Observability Exporter, it is processed automatically. The time series port is enabled by default.
 
 **Note:**
-   Once you deploy a Citrix Observability Exporter instance with a specific endpoint, you cannot modify it. For changing the endpoint, you must bring down the Citrix Observability Exporter instance and deploy it again with the new endpoint.
+   Once you deploy a Citrix ADC Observability Exporter instance with a specific endpoint, you cannot modify it. For changing the endpoint, you must bring down the Citrix ADC Observability Exporter instance and deploy it again with the new endpoint.
 
-## Configure Citrix Observability Exporter support on Citrix ADC
+## Configure Citrix ADC Observability Exporter support on Citrix ADC
 
-Once you deploy Citrix Observability Exporter, you need to deploy the Citrix ADC appliance. You can either deploy Citrix ADC CPXs as pods inside the Kubernetes cluster or deploy a Citrix ADC MPX or VPX appliance outside the cluster.
+Once you deploy Citrix ADC Observability Exporter, you need to deploy the Citrix ADC appliance. You can either deploy Citrix ADC CPX instances as pods inside the Kubernetes cluster or deploy a Citrix ADC MPX or VPX appliance outside the cluster.
 
-### Deploy Citrix ADC CPX with Citrix Observability Exporter Support
+### Deploy Citrix ADC CPX with Citrix ADC Observability Exporter Support
 
 In this procedure, a Citrix ADC CPX is deployed with the Citrix ingress controller as a sidecar. The Citrix ADC CPX instance load balances the North-South traffic to microservices in your Kubernetes cluster.
 
-Depending on the endpoint you are using, you can choose the YAML file for deploying Citrix ADC CPX. These YAML files include the configuration required for Citrix Observability Exporter.
+Depending on the endpoint you are using, you can choose the YAML file for deploying Citrix ADC CPX. These YAML files include the configuration required for Citrix ADC Observability Exporter.
 
-Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Observability Exporter support enabled.
+Perform the following steps to deploy a Citrix ADC CPX instance with Citrix ADC Observability Exporter support enabled.
 
 1. Download the YAML file for deploying Citrix ADC CPX according to the endpoint.
 
@@ -141,17 +141,17 @@ Perform the following steps to deploy a Citrix ADC CPX instance with Citrix Obse
   
 
 **Note:**
-  You can also define the parameters to import using smart annotations for service. You can specify the parameters in the YAML for deploying Citrix Observability Exporter. However, you can use service annotations only when the service type is `LoadBalancer`.
+  You can also define the parameters to import using smart annotations for service. You can specify the parameters in the YAML for deploying Citrix ADC Observability Exporter. However, you can use service annotations only when the service type is `LoadBalancer`.
 
   For example:
         
                 service.citrix.com/analyticsprofile: '{"<service name>":'{"webinsight": {"httpurl":"ENABLED", "httpuseragent":"ENABLED"}
 
-### Deploy the Citrix ingress controller with Citrix Observability Exporter support for Citrix ADC MPX or VPX
+### Deploy the Citrix ingress controller with Citrix ADC Observability Exporter support for Citrix ADC MPX or VPX
 
- In this deployment, the Citrix ingress controller is deployed as a standalone pod in the Kubernetes cluster. It controls the Citrix ADC MPX or VPX appliance deployed outside the cluster. The Citrix Observability Exporter support is enabled in the Citrix ingress controller configuration.
+ In this deployment, the Citrix ingress controller is deployed as a standalone pod in the Kubernetes cluster. It controls the Citrix ADC MPX or VPX appliance deployed outside the cluster. The Citrix ADC Observability Exporter support is enabled in the Citrix ingress controller configuration.
 
- Perform the following steps to deploy the Citrix ingress controller as a pod in the Kubernetes cluster with Citrix Observability Exporter support enabled.
+ Perform the following steps to deploy the Citrix ingress controller as a pod in the Kubernetes cluster with Citrix ADC Observability Exporter support enabled.
 
 You need to complete the [prerequisites](https://developer-docs.citrix.com/projects/citrix-k8s-ingress-controller/en/latest/deploy/deploy-cic-yaml/#prerequisites) for deploying the Citrix ingress controller as a standalone pod.
 
@@ -167,11 +167,11 @@ You need to complete the [prerequisites](https://developer-docs.citrix.com/proje
 
 ## Deploy sample applications
 
- Once you create the necessary secrets, Citrix ADC deployment, and Citrix Observability Exporter, you can test the Citrix Observability Exporter deployment with a sample application.
+ Once you create the necessary secrets, Citrix ADC deployment, and Citrix ADC Observability Exporter, you can test the Citrix ADC Observability Exporter deployment with a sample application.
 
-### Verify Citrix Observability Exporter tracing support
+### Verify Citrix ADC Observability Exporter tracing support
 
-This example shows how to verify the Citrix Observability Exporter deployment and distributed tracing using a sample application. In this example, a Citrix ADC CPX instance is deployed with Citrix Observability Exporter support enabled.
+This example shows how to verify the Citrix ADC Observability Exporter deployment and distributed tracing using a sample application. In this example, a Citrix ADC CPX instance is deployed with Citrix ADC Observability Exporter support enabled.
 
 1. Deploy a sample web application using the [watches-app-tracing.yaml](../examples/tracing/watches-app-tracing.yaml)
 file. This file includes the deployment, service, and Ingress.
@@ -192,16 +192,16 @@ file. This file includes the deployment, service, and Ingress.
 
 This image shows a trace created for a request in Zipkin. You can see that multiple microservices are invoked to serve a single request and spans for each microservice is created. The time taken to process a request on each microservice is displayed. Spans starting with `k8s_*` are created for Citrix ADC CPX and other spans are for back end web servers.
 
-### Verify Citrix Observability Exporter transaction support
+### Verify Citrix ADC Observability Exporter transaction support
 
-This example shows how to verify a Citrix Observability Exporter deployment with Elasticsearch as the transaction endpoint.
+This example shows how to verify a Citrix ADC Observability Exporter deployment with Elasticsearch as the transaction endpoint.
 
 You must complete the following steps before performing the steps in this example:
 
-- Deploy Citrix Observability Exporter with Elasticsearch as the transaction endpoint.
+- Deploy Citrix ADC Observability Exporter with Elasticsearch as the transaction endpoint.
 - Deploy Citrix ADC CPX with Citrix Observability Exporter support enabled
 
-Once you deploy Citrix Observability Exporter and Citrix ADC CPX perform the following steps:
+Once you deploy Citrix ADC Observability Exporter and Citrix ADC CPX perform the following steps:
 
 1. Deploy a sample web application using the [webserver-es.yaml](../examples/elasticsearch/webserver-es.yaml)
 file. This sample web application is added as a service in the Ingress.
