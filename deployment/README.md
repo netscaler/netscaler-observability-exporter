@@ -1,4 +1,8 @@
-# Deploy Citrix Observability Exporter
+# Citrix ADC Observability Exporter Deployment
+
+Citrix ADC Observability Exporter is supported on both Kubernetes and stand-alone Linux environments. In a Kubernetes environment, you can deploy Citrix ADC Observability Exporter using Kubernetes YAML or Helm charts. To deploy Citrix ADC Observability Exporter using Kubernetes YAML, see [Deployment](https://github.com/citrix/citrix-observability-exporter/blob/master/docs/deploy-coe.md). Also, you can deploy Citrix ADC Observability Exporter as a container on a Docker system in stand-alone Linux environment. For more information, see [Deploy Citrix ADC Observability Exporter on Linux](https://github.com/citrix/citrix-observability-exporter/blob/master/coe-on-standalone-linux.md).
+
+## Deploy Citrix ADC Observability Exporter
 
 This topic provides information on how to deploy Citrix Observability Exporter using Kubernetes YAML files.
 <!---
