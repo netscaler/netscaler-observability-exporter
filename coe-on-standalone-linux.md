@@ -62,3 +62,54 @@ Perform the following steps to deploy Citrix ADC Observability Exporter on a sta
 3.  Run the `docker-compose up` command.
 
 Citrix ADC Observability Exporter is deployed and exposed on port 5557 and port 5563 for Citrix ADC transaction data and metrics data respectively.
+
+## Integrate Citrix ADC with multiple Citrix ADC Observability Exporter instances manually
+
+You can configure Citrix ADC Observability Exporter manually in Citrix ADC. Manual configuration is suitable for Citrix ADC in MPX and VPX form factors. We recommend deploying the Citrix ADC Observability Exporter in the automated way with the YAML file as described in the preceding sections.
+
+For information about deploying Citrix ADC Observability Exporter (coe-kafka.yaml) and web application (webserver-kafka.yaml), see the preceding sections.
+
+```
+enable feature appflow
+enable ns mode ULFD
+add service COE_svc1 <COE IP1> LOGSTREAM <COE PORT1>
+add service COE_svc2 <COE IP2> LOGSTREAM <COE PORT2>
+add service COE_svc3 <COE IP3> LOGSTREAM <COE PORT3>
+add lb vserver COE LOGSTREAM 0.0.0.0 0
+bind lb vserver COE COE_svc1
+bind lb vserver COE COE_svc2
+bind lb vserver COE COE_svc3
+add analytics profile web_profile -collectors COE -type webinsight -httpURL ENABLED -httpHost ENABLED -httpMethod ENABLED -httpUserAgent ENABLED -httpContentType ENABLED
+add analytics profile tcp_profile -collectors COE -type tcpinsight
+bind lb/cs vserver <WEB-PROXY> -analyticsProfile web_profile
+bind lb/cs vserver <WEB-PROXY> -analyticsProfile tcp_profile
+ 
+# To enable metrics push to prometheus
+add service metrichost_SVC <IP> HTTP <PORT>
+set analyticsprofile ns_analytics_time_series_profile -collectors metrichost_SVC -metrics ENABLED -outputMode prometheus
+
+```
+
+Add Citrix ADC Observability Exporter using FQDN
+
+```
+enable feature appflow
+enable ns mode ULFD
+add dns nameserver <KUBE-CoreDNS>
+add server COEsvr <FQDN>
+add servicegroup COEsvcgrp LOGSTREAM  -autoScale DNS
+bind servicegroup COEsvcgrp COEsvr <PORT>
+add lb vserver COE LOGSTREAM 0.0.0.0 0
+bind lb vserver COE COEsvcgrp
+add analytics profile web_profile -collectors COE -type webinsight -httpURL ENABLED -httpHost ENABLED -httpMethod ENABLED -httpUserAgent ENABLED -httpContentType ENABLED
+add analytics profile tcp_profile -collectors COE -type tcpinsight
+bind lb vserver <WEB-VSERVER> -analyticsProfile web_profile
+bind lb vserver <WEB-VSERVER> -analyticsProfile tcp_profile
+ 
+ # To enable metrics push to prometheus
+add service metrichost_SVC <IP> HTTP <PORT>
+set analyticsprofile ns_analytics_time_series_profile -collectors metrichost_SVC -metrics ENABLED -outputMode prometheus
+
+```
+
+For information on troubleshooting related to Citrix ADC Observability Exporter, see [Citrix ADC CPX troubleshooting](https://docs.citrix.com/en-us/citrix-adc-cpx/current-release/cpx-troubleshooting.html).
