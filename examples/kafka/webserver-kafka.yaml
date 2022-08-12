@@ -35,7 +35,7 @@ spec:
   selector:
     app: webserver
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: webserver-ingress
@@ -50,6 +50,9 @@ spec:
        - http:
           paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: webserver
-              servicePort: 80
+              service:
+                name: webserver
+                port:
+                  number: 80
