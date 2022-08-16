@@ -90,3 +90,15 @@ To verify the deployment, perform the following steps:
   3.  Access the Splunk server using a browser with the URL. For example, https://splunk-node-IP:splunk nodeport/.
 
       ![Verification output](media/splunk-verification-output.png)
+
+## Import pre-built dashboards for Splunk
+
+You can import pre-built Splunk dashboards provided by Citrix. The JSON files for importing the [Dashboards] are available at the [GitHub repository](https://github.com/citrix/citrix-observability-exporter/tree/master/dashboards). These dashboards provide you the option to filter the transactions based on parameters such as an instance IP address, application name, or client and server IP address and so on.
+
+Following is a sample HTTP dashboard. This dashboard shows data such as HTTP header-based charts, transactional latency, response type distribution and so on.
+
+ ![HTTP dashboard](media/splunk-http-dashboard.jpeg)
+
+Following is a sample TCP dashboard for Splunk. This dashboard shows data such as bandwidth distribution for each application, TCP Jitter, client and server RTT, and so on.
+
+![TCP dashboard](media/splunk-tcp-dashboard.jpeg)
