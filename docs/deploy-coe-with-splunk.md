@@ -93,9 +93,9 @@ To verify the deployment, perform the following steps:
 
 ## Import pre-built dashboards for Splunk
 
-You can import pre-built Splunk dashboards provided by Citrix. The JSON files for importing the [Dashboards] are available at the [GitHub repository](https://github.com/citrix/citrix-observability-exporter/tree/master/dashboards). These dashboards provide you the option to filter the transactions based on parameters such as an instance IP address, application name, or client and server IP address and so on.
+You can import pre-built Splunk dashboards provided by Citrix. The JSON files for importing the dashboards are available at the [GitHub repository](https://github.com/citrix/citrix-observability-exporter/tree/master/dashboards). These dashboards provide you the option to filter the transactions based on parameters such as an instance IP address, application name, or client and server IP address and so on.
 
-Following is a sample HTTP dashboard. This dashboard shows data such as HTTP header-based charts, transactional latency, response type distribution and so on.
+Following is a sample HTTP dashboard. This dashboard shows data such as HTTP header-based charts, transactional latency, response type distribution, and so on.
 
  ![HTTP dashboard](media/splunk-http-dashboard.jpeg)
 
