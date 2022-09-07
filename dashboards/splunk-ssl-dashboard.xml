@@ -1,0 +1,190 @@
+<form>
+    <label>ADC SSL Dashboard</label>
+    <fieldset submitButton="false">
+      <input type="time" token="time">
+        <label>Time</label>
+        <default>
+          <earliest>0</earliest>
+          <latest></latest>
+        </default>
+      </input>
+      <input type="dropdown" token="coeindex">
+        <label>Index</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>index</fieldForLabel>
+        <fieldForValue>index</fieldForValue>
+        <search>
+          <query>| eventcount summarize=false index=* | dedup index | fields index</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="observationPointId" searchWhenChanged="true">
+        <label>Instance</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>observationPointId</fieldForLabel>
+        <fieldForValue>observationPointId</fieldForValue>
+        <search>
+          <query>index="$coeindex$" | stats estdc(observationPointId) as count by observationPointId 
+  |  fields observationPointId</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="appName" searchWhenChanged="true">
+        <label>Application/Vserver</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>appName</fieldForLabel>
+        <fieldForValue>appName</fieldForValue>
+        <search>
+          <query>index="$coeindex$" 
+  |  search observationPointId="$observationPointId$" | stats estdc(appName) as count by appName 
+   |  fields appName</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="transCltIpv4Address" searchWhenChanged="true">
+        <label>Client IP</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>transCltIpv4Address</fieldForLabel>
+        <fieldForValue>transCltIpv4Address</fieldForValue>
+        <search>
+          <query>index="$coeindex$"
+  | search observationPointId="$observationPointId$"
+  | search appName="$appName$"
+  | top transCltIpv4Address</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="backendSvrIpv4Address" searchWhenChanged="true">
+        <label>Server IP</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>backendSvrIpv4Address</fieldForLabel>
+        <fieldForValue>backendSvrIpv4Address</fieldForValue>
+        <search>
+          <query>index="$coeindex$"
+  | search observationPointId="$observationPointId$"
+  | search appName="$appName$"
+  | top backendSvrIpv4Address</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+    </fieldset>
+    <row>
+      <panel>
+        <title>SSL Reuse Frontend</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$" | top sslIsReuseFE</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+          </search>
+          <option name="charting.chart">bar</option>
+          <option name="charting.drilldown">none</option>
+          <option name="refresh.display">progressbar</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>SSL Cipher Name</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$" | top sslCipherValueFE</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+          </search>
+          <option name="charting.chart">bar</option>
+          <option name="charting.drilldown">none</option>
+          <option name="refresh.display">progressbar</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>SSL Cipher Strength</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$" | top sslCipherStrengthFE</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+          </search>
+          <option name="charting.chart">bar</option>
+          <option name="charting.drilldown">none</option>
+          <option name="refresh.display">progressbar</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>SSL Version</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$" | top sslVersionFE</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+          </search>
+          <option name="charting.chart">pie</option>
+          <option name="charting.drilldown">none</option>
+          <option name="refresh.display">progressbar</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>SSL Client Auth</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$" | top sslIsClientAuthEnabledFE</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+          </search>
+          <option name="charting.chart">bar</option>
+          <option name="charting.drilldown">none</option>
+          <option name="refresh.display">progressbar</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>SSL Cert Type</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$" | top sslCertTypeFE</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+          </search>
+          <option name="charting.chart">bar</option>
+          <option name="charting.drilldown">none</option>
+          <option name="refresh.display">progressbar</option>
+        </chart>
+      </panel>
+    </row>
+  </form>
