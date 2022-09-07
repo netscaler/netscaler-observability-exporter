@@ -1,0 +1,891 @@
+<form>
+    <label>ADC TCP Dashboard</label>
+    <fieldset submitButton="false">
+      <input type="time" token="time">
+        <label>Time</label>
+      </input>
+      <input type="dropdown" token="coeindex">
+        <label>Index</label>
+        <choice value="*">all</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>index</fieldForLabel>
+        <fieldForValue>index</fieldForValue>
+        <search>
+          <query>| eventcount summarize=false index=* | dedup index | fields index</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="observationPointId">
+        <label>Instance</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>observationPointId</fieldForLabel>
+        <fieldForValue>observationPointId</fieldForValue>
+        <search>
+          <query>index="$coeindex$" | stats estdc(observationPointId) as count by observationPointId 
+  |  fields observationPointId</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="appName">
+        <label>Application/Vserver</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>appName</fieldForLabel>
+        <fieldForValue>appName</fieldForValue>
+        <search>
+          <query>index="$coeindex$" 
+  |  search observationPointId="$observationPointId$" | stats estdc(appName) as count by appName 
+   |  fields appName</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="transCltIpv4Address">
+        <label>Client IP</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>transCltIpv4Address</fieldForLabel>
+        <fieldForValue>transCltIpv4Address</fieldForValue>
+        <search>
+          <query>index="$coeindex$"
+  | search observationPointId="$observationPointId$"
+  | search appName="$appName$"
+  | top transCltIpv4Address</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <input type="dropdown" token="backendSvrIpv4Address">
+        <label>Server IP</label>
+        <choice value="*">all</choice>
+        <fieldForLabel>backendSvrIpv4Address</fieldForLabel>
+        <fieldForValue>backendSvrIpv4Address</fieldForValue>
+        <search>
+          <query>index="$coeindex$"
+  | search observationPointId="$observationPointId$"
+  | search appName="$appName$"
+  | top backendSvrIpv4Address</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+    </fieldset>
+    <row>
+      <panel>
+        <title>Application Throughput</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"| eval throughput=transCltTotTxOctCnt/(connEndTimestamp-connStartTimestamp)
+  |  chart avg(throughput) over appName</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">App Name</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Avg Throughput</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">1</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Application Load</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(transCltTotRxOctCnt) over appName</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">App Name</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Avg Client data download</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">stacked</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Application TCP Connection Length</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"| eval conlen=(connEndTimestamp-connStartTimestamp) |  chart avg(conlen) over appName</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.text">App Name</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Avg Connection Length</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">bar</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>Application Vs Client</title>
+        <table>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"| chart values(transCltIpv4Address) over appName</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="count">20</option>
+          <option name="dataOverlayMode">none</option>
+          <option name="drilldown">cell</option>
+          <option name="percentagesRow">false</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="rowNumbers">false</option>
+          <option name="totalsRow">true</option>
+          <option name="wrap">false</option>
+        </table>
+      </panel>
+      <panel>
+        <title>Client Distribution</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"
+  | top transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">pie</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Client Latency Chart</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(transCltRTT) over transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">Client IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">RTT</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">1</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>Client TCP Window Monitor</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(clntTcpZeroWindowCount) over transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">Client IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Zero Window count Avg</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Client Retransmissions</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(clntTcpPacketsRetransmited) over transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">Client IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Packet Retrans Avg</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Client Fast Retransmissions</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(clntFastRetxCount) over transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">Client IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Fast Retrans Avg</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>Client RTO</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(clntTcpRtoCount) over transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">Client IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">RTO avg</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Client Jitter</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(clntTcpJitter) over transCltIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">-45</option>
+          <option name="charting.axisTitleX.text">Client IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">TCP Jitter</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Client MSS</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"
+  | top clientMss</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">pie</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">stacked</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">1</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>Server Load</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(transSvrTotTxOctCnt) over backendSvrIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.text">Server IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Avg Server Data Uploads</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Server Resets</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  search tcpSrvrConnRstCode="NSBE_DBG_RST_PASS"
+  | chart count(tcpSrvrConnRstCode) over backendSvrIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">pie</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">stacked</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">1</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Server TCP Window Monitor</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(srvrTcpZeroWindowCount) over backendSvrIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.text">Server IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Zero Window Count Avg</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+    </row>
+    <row>
+      <panel>
+        <title>Server Latency Chart</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(transSvrRTT) over backendSvrIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.text">Server IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Avg RTT</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+      <panel>
+        <title>Server Retransmissions</title>
+        <chart>
+          <search>
+            <query>index="$coeindex$" 
+  | search observationPointId="$observationPointId$" 
+  | search appName="$appName$"
+  | search transCltIpv4Address="$transCltIpv4Address$"
+  | search backendSvrIpv4Address="$backendSvrIpv4Address$"|  chart avg(svrTcpPacketsRetransmited) over backendSvrIpv4Address</query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+            <sampleRatio>1</sampleRatio>
+          </search>
+          <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+          <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+          <option name="charting.axisTitleX.text">Server IP</option>
+          <option name="charting.axisTitleX.visibility">visible</option>
+          <option name="charting.axisTitleY.text">Packet Retrans Avg</option>
+          <option name="charting.axisTitleY.visibility">visible</option>
+          <option name="charting.axisTitleY2.visibility">visible</option>
+          <option name="charting.axisX.abbreviation">none</option>
+          <option name="charting.axisX.scale">linear</option>
+          <option name="charting.axisY.abbreviation">none</option>
+          <option name="charting.axisY.scale">linear</option>
+          <option name="charting.axisY2.abbreviation">none</option>
+          <option name="charting.axisY2.enabled">0</option>
+          <option name="charting.axisY2.scale">inherit</option>
+          <option name="charting.chart">column</option>
+          <option name="charting.chart.bubbleMaximumSize">50</option>
+          <option name="charting.chart.bubbleMinimumSize">10</option>
+          <option name="charting.chart.bubbleSizeBy">area</option>
+          <option name="charting.chart.nullValueMode">gaps</option>
+          <option name="charting.chart.showDataLabels">none</option>
+          <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+          <option name="charting.chart.stackMode">default</option>
+          <option name="charting.chart.style">shiny</option>
+          <option name="charting.drilldown">none</option>
+          <option name="charting.layout.splitSeries">0</option>
+          <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+          <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+          <option name="charting.legend.mode">standard</option>
+          <option name="charting.legend.placement">right</option>
+          <option name="charting.lineWidth">2</option>
+          <option name="refresh.display">progressbar</option>
+          <option name="trellis.enabled">0</option>
+          <option name="trellis.scales.shared">1</option>
+          <option name="trellis.size">medium</option>
+        </chart>
+      </panel>
+    </row>
+  </form>
