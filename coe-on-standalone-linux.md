@@ -28,40 +28,88 @@ Perform the following steps to deploy Citrix ADC Observability Exporter on a sta
               - ./cores/:/cores/:rw
         ```
 
-2.  Create `lstreamd_default.conf` file with the required settings. The following is a sample configuration for the Elasticsearch endpoint speific deployment.
+2.  Create the `lstreamd_default.conf` file with the required settings.
 
-        {
-                "Endpoints": {
-                    "ES": {
-                        "ServerUrl": "elasticsearch.default.svc.cluster.local:9200",
-                        "IndexPrefix":"adc_coe",
-                        "IndexInterval": "daily",
-                        "RecordType": {
-                            "HTTP": "all",
-                            "TCP": "all",
-                            "SWG": "all",
-                            "VPN": "all",
-                            "NGS": "all",
-                            "ICA": "all",
-                            "APPFW": "none",
-                            "BOT": "none",
-                            "VIDEOOPT": "none",
-                            "BURST_CQA": "none",
-                            "SLA": "none",
-                            "MONGO": "none"
-                        },
-                        "ProcessAlways": "no",
-                        "ProcessYieldTimeOut": "500",
-                        "MaxConnections": "512",
-                        "ElkMaxSendBuffersPerSec": "64",
-                        "JsonFileDump": "no"
+    -  Following is a sample configuration for Elasticsearch endpoint specific deployment:
+
+            {
+                    "Endpoints": {
+                        "ES": {
+                            "ServerUrl": "elasticsearch.default.svc.cluster.local:9200",
+                            "IndexPrefix":"adc_coe",
+                            "IndexInterval": "daily",
+                            "RecordType": {
+                                "HTTP": "all",
+                                "TCP": "all",
+                                "SWG": "all",
+                                "VPN": "all",
+                                "NGS": "all",
+                                "ICA": "all",
+                                "APPFW": "none",
+                                "BOT": "none",
+                                "VIDEOOPT": "none",
+                                "BURST_CQA": "none",
+                                "SLA": "none",
+                                "MONGO": "none"
+                            },
+                            "ProcessAlways": "no",
+                            "ProcessYieldTimeOut": "500",
+                            "MaxConnections": "512",
+                            "ElkMaxSendBuffersPerSec": "64",
+                            "JsonFileDump": "no"
+                        }
                     }
-                }
-        }
+            }
+
+    -  Following is a sample configuration for Elastic search endpoint specific deployment with Prometheus. For Citrix ADC Observability Exporter version 1.4.0001, you should add `"PrometheusMode": "yes"` to the Elasticsearch `lstreamd_default.conf` file to enable Prometheus monitoring.
+
+            {
+                    "Endpoints": {
+                        "ES": {
+                            "ServerUrl": "elasticsearch.default.svc.cluster.local:9200",
+                            "IndexPrefix":"adc_coe",
+                            "IndexInterval": "daily",
+                            "RecordType": {
+                                "HTTP": "all",
+                                "TCP": "all",
+                                "SWG": "all",
+                                "VPN": "all",
+                                "NGS": "all",
+                                "ICA": "all",
+                                "APPFW": "none",
+                                "BOT": "none",
+                                "VIDEOOPT": "none",
+                                "BURST_CQA": "none",
+                                "SLA": "none",
+                                "MONGO": "none"
+                            },
+                            "ProcessAlways": "no",
+                            "ProcessYieldTimeOut": "500",
+                            "MaxConnections": "512",
+                            "ElkMaxSendBuffersPerSec": "64",
+                            "JsonFileDump": "no"
+                            "PrometheusMode": "yes"
+                        }
+                    }
+            }
 
 3.  Run the `docker-compose up` command.
 
 Citrix ADC Observability Exporter is deployed and exposed on port 5557 and port 5563 for Citrix ADC transaction data and metrics data respectively.
+
+### Prometheus standalone deployment
+
+For Citrix ADC observability exporter, with Prometheus as the endpoint following is the `lstreamd_default.conf` file configuration.
+
+            {
+                "Endpoints": {
+                    "ZIPKIN": {
+                                "ServerUrl":"http://0.0.0.0:0",
+                                "RecordType":{},
+                                "PrometheusMode":"yes"
+                              }
+                     }
+            }
 
 ## Integrate Citrix ADC with multiple Citrix ADC Observability Exporter instances manually
 
