@@ -26,7 +26,9 @@ Perform the following steps to deploy Citrix ADC Observability Exporter on a sta
             volumes:
               - ./lstreamd_default.conf:/var/logproxy/lstreamd/conf/lstreamd_default.conf:rw
               - ./cores/:/cores/:rw
-        ```
+      ```
+
+    **Note:** Currently the image tag `quay.io/citrix/citrix-observability-exporter:latest` corresponds to Citrix ADC Observability Exporter version 1.2.001 and not 1.4.001.
 
 2.  Create the `lstreamd_default.conf` file with the required settings.
 
@@ -61,7 +63,7 @@ Perform the following steps to deploy Citrix ADC Observability Exporter on a sta
                     }
             }
 
-    -  Following is a sample configuration for Elastic search endpoint specific deployment with Prometheus. For Citrix ADC Observability Exporter version 1.4.0001, you should add `"PrometheusMode": "yes"` to the Elasticsearch `lstreamd_default.conf` file to enable Prometheus monitoring.
+    -  Following is a sample configuration for Elasticsearch endpoint specific deployment with Prometheus. For Citrix ADC Observability Exporter version 1.4.001, you should add `"PrometheusMode": "yes"` to the Elasticsearch `lstreamd_default.conf` file to enable Prometheus monitoring.
 
             {
                     "Endpoints": {
@@ -87,7 +89,7 @@ Perform the following steps to deploy Citrix ADC Observability Exporter on a sta
                             "ProcessYieldTimeOut": "500",
                             "MaxConnections": "512",
                             "ElkMaxSendBuffersPerSec": "64",
-                            "JsonFileDump": "no"
+                            "JsonFileDump": "no",
                             "PrometheusMode": "yes"
                         }
                     }
@@ -99,8 +101,9 @@ Citrix ADC Observability Exporter is deployed and exposed on port 5557 and port 
 
 ### Prometheus standalone deployment
 
-For Citrix ADC observability exporter, with Prometheus as the endpoint following is the `lstreamd_default.conf` file configuration.
+For Citrix ADC observability exporter version 1.4.001, with Prometheus as the endpoint you need to use the following `lstreamd_default.conf` file configuration.
 
+            lstreamd_default.conf: |
             {
                 "Endpoints": {
                     "ZIPKIN": {
@@ -110,6 +113,8 @@ For Citrix ADC observability exporter, with Prometheus as the endpoint following
                               }
                      }
             }
+
+For Citrix ADC observability exporter versions prior to 1.4.001, you can use the `lstream_default.conf` configuration provided in the [coe-prometheus.yaml](https://github.com/citrix/citrix-observability-exporter/blob/master/deployment/coe-prometheus.yaml) file.
 
 ## Integrate Citrix ADC with multiple Citrix ADC Observability Exporter instances manually
 
