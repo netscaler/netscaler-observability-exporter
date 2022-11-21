@@ -2,7 +2,7 @@
 
 You can configure Prometheus as an endpoint to pull data from Citrix ADC Observability Exporter. You can also configure Grafana to visualize the same data graphically.
 
-Citrix ADC Observability Exporter has a push-gateway server that listens to port 5563 to serve metrics based on pull requests from Prometheus. Citrix ADC Observability Exporter exports time series data to Prometheus. 
+Citrix ADC Observability Exporter has a push-gateway server that listens to port 5563 to serve metrics based on pull requests from Prometheus. Citrix ADC Observability Exporter exports time series data to Prometheus.
 
 ![Prometheus and Grafana architecture](media/coe-prometheus-grafana-architecture.png)
 
@@ -80,20 +80,42 @@ To deploy Prometheus and Grafana using YAML files, perform the following steps:
           kubectl create -f prometheus-grafana.yaml
 
    **Note**: Prometheus and Grafana are deployed in the default namespace of the same Kubernetes cluster.
-   
+
 ### Deploy Citrix ADC Observability Exporter using the YAML file
 
   You can deploy Citrix ADC Observability Exporter using the YAML file. Download the YAML file from [coe-prometheus.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/prometheus/coe-prometheus.yaml).
 
-  To deploy Citrix ADC Observability Exporter using the Kubernetes YAML, run the following command:
-    
-      kubectl create -f coe-prometheus.yaml
+  -  For Citrix ADC Observability Exporter version 1.3.001 and previous versions, you can use the ConfigMap configuration provided in the `coe-prometheus.yaml` YAML file.
 
- **Note**: Modify the YAML file for Citrix ADC Observability Exporter if you have a custom namespace.
+  -  For Citrix ADC Observability Exporter version 1.4.001, you need to modify the ConfigMap in the `coe-prometheus.yaml` file as follows before deployment.
+
+
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: coe-config-prometheus
+          data:
+              lstreamd_default.conf: |
+                {
+              
+                  "Endpoints": {
+                      "ZIPKIN": {
+                                    "ServerUrl":"http://0.0.0.0:0",
+                                    "RecordType":{},
+                                    "PrometheusMode":"yes"
+                                  }
+                        }
+                }
+
+  To deploy Citrix ADC Observability Exporter using the Kubernetes YAML, run the following command.
+
+      kubectl create -f coe-prometheus.yaml
   
+    **Note**: Modify the YAML file for Citrix ADC Observability Exporter if you have a custom namespace.
+
 ### Configure Citrix ADC to export metrics (optional)
 
-  **Note**: If you do not use CIC to configure, then you can do the following manual configuration on your Citrix ADC.
+  **Note**: If you do not use Citrix ingress controller to configure Citrix ADC, then you can do the following manual configuration on your Citrix ADC.
 
   You can manually configure Citrix ADCs to export metrics to the Citrix ADC Observability exporter. Specify the Citrix ADC Observability Exporter IP/FQDN address as an HTTP service and combine it to the default `ns_analytics_time_series_profile` analytics profile. Enable the metrics export and set the output mode to Prometheus.
   
@@ -126,7 +148,7 @@ In the current deployment, a Prometheus server has already been added as a data 
 
   You can create a Grafana dashboard and select the key metrics and the visualization type that is suitable for the data.
 
-  The following procedure shows adding of the ADC CPU metric to a Grafana panel:
+  The following procedure shows how to add the ADC CPU metric to a Grafana panel:
 
   1.  Specify the Panel Title as *ADC CPU*.
   2.  In the Query tab, for the query A, specify the metric as *cpu_use*.
