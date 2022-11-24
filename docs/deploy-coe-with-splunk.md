@@ -65,7 +65,44 @@ The following is a sample application deployment procedure.
 
 ## Deploy Citrix ADC Observability Exporter using the YAML file
 
-  You can deploy Citrix ADC Observability Exporter using the YAML file. Download the YAML file from [coe-splunk.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/splunk/coe-splunk.yaml). Ensure to specify the Splunk server address for the right namespace.
+  You can deploy Citrix ADC Observability Exporter using the YAML file. Download the YAML file from [coe-splunk.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/splunk/coe-splunk.yaml). Ensure to specify the Splunk server address for the right namespace by editing the `coe-splunk.yaml` file.
+  
+  Following is an example of how to specify the  `ServerUrl` in the `lstreamd_default.conf` section in the `coe-splunk.yaml` file . Here, `ServerUrl` means the address of the Splunk server.
+
+  ```
+  lstreamd_default.conf: |
+  {
+    "Endpoints": {
+      "SPLUNK": {
+        "ServerUrl": "http://10.102.34.155:8088",
+        "AuthToken": "",
+        "Index": "",
+        "RecordType": {
+          "HTTP": "all",
+          "TCP": "all",
+          "SWG": "all",
+          "VPN": "all",
+          "NGS": "all",
+          "ICA": "all",
+          "APPFW": "none",
+          "BOT": "all",
+          "VIDEOOPT": "none",
+          "BURST_CQA": "none",
+          "SLA": "none",
+          "MONGO": "none"
+        },
+        "TimeSeries": {
+          "EVENTS": "yes",
+          "AUDITLOGS": "yes"
+        },
+        "ProcessAlways": "no",
+        "ProcessYieldTimeOut": "500",
+        "MaxConnections": "512",
+        "JsonFileDump": "no"
+      }
+    }
+  }
+  ```
 
   **Note**: While deploying Citrix ADC Observability Exporter using the YAML file, along with the Splunk server address, you can provide the `Index` name to which the data to be sent in Splunk Enterprise. By default, this `IndexPrefix` option is empty and the data is uploaded to the default index, that is `main`, in Splunk Enterprise.
 
