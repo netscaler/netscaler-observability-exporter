@@ -4,37 +4,41 @@ metadata:
   name: coe-config-splunk
 data:
   lstreamd_default.conf: |
-  {
-    "Endpoints": {
-      "SPLUNK": {
-        "ServerUrl": "",
-        "AuthToken": "",
-        "Index": "",
-        "RecordType": {
-          "HTTP": "all",
-          "TCP": "all",
-          "SWG": "all",
-          "VPN": "all",
-          "NGS": "all",
-          "ICA": "all",
-          "APPFW": "none",
-          "BOT": "all",
-          "VIDEOOPT": "none",
-          "BURST_CQA": "none",
-          "SLA": "none",
-          "MONGO": "none"
-        },
-        "TimeSeries": {
-          "EVENTS": "no",
-          "AUDITLOGS": "no"
-        },
-        "ProcessAlways": "no",
-        "ProcessYieldTimeOut": "500",
-        "MaxConnections": "512",
-        "JsonFileDump": "no"           
+    {
+      "transRateLimitEnabled": "no",
+      "transRateLimit": "100",
+      "transQueueLimit": "1024",
+      "transRateLimitWindow": "5",
+      "Endpoints": {
+        "SPLUNK": {
+          "ServerUrl": "",
+          "AuthToken": "",
+          "Index": "",
+          "RecordType": {
+            "HTTP": "all",
+            "TCP": "all",
+            "SWG": "all",
+            "VPN": "all",
+            "NGS": "all",
+            "ICA": "all",
+            "APPFW": "none",
+            "BOT": "all",
+            "VIDEOOPT": "none",
+            "BURST_CQA": "none",
+            "SLA": "none",
+            "MONGO": "none"
+          },
+          "TimeSeries": {
+            "EVENTS": "no",
+            "AUDITLOGS": "no"
+          },
+          "ProcessAlways": "no",
+          "ProcessYieldTimeOut": "500",
+          "MaxConnections": "512",
+          "JsonFileDump": "no"           
+        }
       }
     }
-  }
 ---
 
 apiVersion: apps/v1
@@ -59,7 +63,7 @@ spec:
     spec:
       containers:
         - name: coe-splunk
-          image: "quay.io/citrix/citrix-observability-exporter:1.4.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.5.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
