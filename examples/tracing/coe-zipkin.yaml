@@ -5,6 +5,10 @@ metadata:
 data:
   lstreamd_default.conf: |
     {
+        "transRateLimitEnabled": "no",
+        "transRateLimit": "100",
+        "transQueueLimit": "1024",
+        "transRateLimitWindow": "5",
         "Endpoints": {
           "ZIPKIN": {
             "ServerUrl": "zipkin.default.svc.cluster.local:9411/api/v1/spans",
@@ -42,7 +46,7 @@ spec:
     spec:
       containers:
         - name: coe-zipkin
-          image: "quay.io/citrix/citrix-observability-exporter:1.4.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.5.001"
           imagePullPolicy: Always
           securityContext:
             privileged: true

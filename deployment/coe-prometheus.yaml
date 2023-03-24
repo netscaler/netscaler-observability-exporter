@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: coe-prometheus
-          image: "quay.io/citrix/citrix-observability-exporter:1.4.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.5.001"
           imagePullPolicy: Always
           securityContext:
             privileged: true
