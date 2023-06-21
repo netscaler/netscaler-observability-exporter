@@ -25,7 +25,7 @@ Perform the following steps to deploy Citrix ADC Observability Exporter on a sta
             privileged: true
             volumes:
               - ./lstreamd_default.conf:/var/logproxy/lstreamd/conf/lstreamd_default.conf:rw
-              - ./var/crash/:/var/crash/:rw
+              - ./cores:/var/crash/:rw
       ```
 
     **Note:** Currently the image tag `quay.io/citrix/citrix-observability-exporter:latest` corresponds to Citrix ADC Observability Exporter version 1.2.001 and not 1.4.001.
