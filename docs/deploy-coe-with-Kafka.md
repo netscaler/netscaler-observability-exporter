@@ -155,7 +155,7 @@ To edit the YAML file for the required changes, perform the following steps:
                   mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
                   subPath: lstreamd_default.conf
                 - name: core-data
-                  mountPath: /cores/
+                  mountPath: /var/crash/
           volumes:
             - name: lstreamd-config-kafka
               configMap:

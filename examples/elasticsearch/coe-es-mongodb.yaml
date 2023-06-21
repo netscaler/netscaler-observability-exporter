@@ -67,7 +67,7 @@ spec:
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
               subPath: lstreamd_default.conf
             - name: core-data
-              mountPath: /cores/
+              mountPath: /var/crash/
       volumes:
         - name: lstreamd-config-es
           configMap:

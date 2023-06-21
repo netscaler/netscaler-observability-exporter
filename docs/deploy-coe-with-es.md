@@ -213,7 +213,7 @@ To verify if Citrix ADC sends application data logs to Citrix ADC Observability 
 
   If Citrix ADC Observability Exporter fails, you can collect logs and files available at the following location and contact Citrix Support.
 
-          /cores/ (Loation of the coredump files, if any.)
+          /var/crash/ (Loation of the coredump files, if any.)
           /var/ulflog/ (Location of the `libulfd` logs and counter details.)
           /var/log  (Location of the console logs, lstreamd logs and so on.)
 
