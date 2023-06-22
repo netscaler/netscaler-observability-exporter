@@ -1,6 +1,6 @@
 # Citrix ADC Observability Exporter with Kafka as endpoint
 
-Citrix ADC Observability Exporter is a container that collects metrics and transactions from Citrix ADC. It also transforms the data into the formats (such as AVRO) that are supported in Kafka and exports the data to the endpoint. Kafka is an open-source and distributed event streaming platform for high-performance data pipelines and streaming analytics.
+Citrix ADC Observability Exporter is a container that collects metrics and transactions from Citrix ADC. It also transforms the data into the formats (such as AVRO) that is supported in Kafka and exports the data to the endpoint. Kafka is an open-source and distributed event streaming platform for high-performance data pipelines and streaming analytics.
 
 ## Deploy Citrix ADC Observability Exporter
 
@@ -20,7 +20,7 @@ The following diagram illustrates a Citrix ADC as an Ingress Gateway with Citrix
 
   **Note**: In this example scenario, the YAML file is used to deploy Citrix ADC Observability Exporter in the Kubernetes *defauIt* namespace. If you want to deploy in a private Kubernetes namespace other than *default*, edit the YAML file to specify the namespace. 
 
-The following is a sample application deployment procdure.
+The following is a sample application deployment procedure.
 
   **Note**: If you have a pre-deployed web application, skip the step 1 and 2.
 
@@ -220,7 +220,7 @@ To verify the Citrix ADC Observability Exporter deployment, perform the followin
 
       ![HTTP methods](media/coe-kafka-http-methods.png)
   
-  3.  Use Kafka Consumer to view the transaction data. Access kafka Consumer from [PythonKafkaConsumer](https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html).
+  3.  Use Kafka Consumer to view the transaction data. Access Kafka Consumer from [PythonKafkaConsumer](https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html).
   
       The following image shows sample data from Kafka Consumer.
 
