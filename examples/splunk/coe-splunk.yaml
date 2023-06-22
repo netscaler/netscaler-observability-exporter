@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
         - name: coe-splunk
-          image: "quay.io/citrix/citrix-observability-exporter:1.5.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.6.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
