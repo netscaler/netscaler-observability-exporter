@@ -1,6 +1,6 @@
 # Citrix ADC Observability Exporter with Kafka as endpoint
 
-Citrix ADC Observability Exporter is a container that collects metrics and transactions from Citrix ADC. It also transforms the data into the formats (such as AVRO) that is supported in Kafka and exports the data to the endpoint. Kafka is an open-source and distributed event streaming platform for high-performance data pipelines and streaming analytics.
+Citrix ADC Observability Exporter is a container that collects metrics and transactions from Citrix ADC. It also transforms the data into the formats (such as AVRO) that are supported in Kafka and exports the data to the endpoint. Kafka is an open-source and distributed event streaming platform for high-performance data pipelines and streaming analytics.
 
 ## Deploy Citrix ADC Observability Exporter
 
@@ -314,7 +314,7 @@ The following example shows the YAML file with the data format configured as JSO
                     "BURST_CQA": "none",
                     "SLA": "none",
                     "MONGO": "none"
-                },
+                }
               }
           }
         }
