@@ -112,8 +112,10 @@ To edit the YAML file for the required changes, perform the following steps:
           }
         }
 ```
+  
+  **Note:** To export transactions in the JSON format, see [exporting transaction in JSON format to Kafka](#support-for-exporting-transactions-in-the-json-format-from-citrix-adc-observability-exporter-to-kafka).
 
-2.  Specify the host name and IP or FQDN address of the Kafka nodes. Use the following YAML definition for a three node Kafka cluster:
+2. Specify the host name and IP or FQDN address of the Kafka nodes. Use the following YAML definition for a three node Kafka cluster:
 
 ```yml
     apiVersion: apps/v1
@@ -274,4 +276,45 @@ set analyticsprofile ns_analytics_time_series_profile -collectors metrichost_SVC
 ```
 
 For information on troubleshooting related to Citrix ADC Observability Exporter, see [Citrix ADC CPX troubleshooting](https://docs.citrix.com/en-us/citrix-adc-cpx/current-release/cpx-troubleshooting.html).
-  
+
+## Support for exporting transactions in the JSON format from Citrix ADC Observability Exporter to Kafka
+
+You can now export transactions from Citrix ADC Observability Exporter to Kafka in the JSON format apart from the AVRO format.
+A new parameter `DataFormat` is introduced in the Kafka deployment ConfigMap to support transactions in the JSON format.
+This parameter can accept AVRO and JSON values. For allowing JSON based transactions, set the value of
+`DataFormat` as JSON in the
+[coe-kafka.yaml](https://raw.githubusercontent.com/citrix/citrix-observability-exporter/master/examples/kafka/coe-kafka.yaml) file. The default value is AVRO.
+
+The following example shows the YAML file with the data format configured as JSON.
+
+```yml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: coe-config-kafka
+    data:
+      lstreamd_default.conf: |
+        {
+            "Endpoints": {
+              "KAFKA": {
+                DataFormat: "JSON",
+                "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
+                "KafkaTopic": "HTTP", #Specify the desired kafka topic
+                "RecordType": {
+                    "HTTP": "all",
+                    "TCP": "all",
+                    "SWG": "all",
+                    "VPN": "all",
+                    "NGS": "all",
+                    "ICA": "all",
+                    "APPFW": "none",
+                    "BOT": "none",
+                    "VIDEOOPT": "none",
+                    "BURST_CQA": "none",
+                    "SLA": "none",
+                    "MONGO": "none"
+                },
+              }
+          }
+        }
+```
