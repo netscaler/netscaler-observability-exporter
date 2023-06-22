@@ -298,7 +298,7 @@ The following example shows the YAML file with the data format configured as JSO
         {
             "Endpoints": {
               "KAFKA": {
-                "DataFormat: "JSON",
+                "DataFormat": "JSON",
                 "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
                 "KafkaTopic": "HTTP", #Specify the desired kafka topic
                 "RecordType": {
