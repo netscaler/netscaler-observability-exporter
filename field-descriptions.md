@@ -1,6 +1,6 @@
 # Description of configuration parameters
 
-This topic contains descriptions of the `lstreamed_default.conf` file parameters.  The `lstreamed_default.conf` parameters are used for  endpoint specific configurations.
+This topic contains descriptions of the `lstreamed_default.conf` file parameters. The `lstreamed_default.conf` parameters are used for endpoint specific configurations.
 
 -  `ServerUrl`: Specifies the address of the server.
 
@@ -46,28 +46,24 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
 
 -  `FileSizeMax`:
 
-    For Kafka endpoint, AVRO files are created and stored on the disk before they get pushed to the endpoint.
+    For the Kafka endpoint, AVRO files are created and stored on the disk before they get pushed to the endpoint.
     This parameter specifies the size of each such file in Kibibyte (KiB). A file can contain multiple transaction records. The default value is 48 KiB.
 
 -  `RecordType`:
 
-    Specifies the types of records you want to export:
+    Specifies the types of records that you want to export:
 
     -  HTTP
     -  TCP
     -  SWG
     -  VPN
-    -  NGN
     -  ICA
     -  APPFW
     -  BOT
-    -  BOT_LE
     -  VIDEOPT
     -  BURST_CQA
     -  SLA
     -  MONGO
-    -  BOT_KM
-    -  AS_FDI
     -  MQTT
 
     Citrix ADC Observability Exporter allows filtering of transaction records of various insights.
@@ -81,7 +77,7 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
 
 -  `EVENTS`:
 
-    Citrix ADC Observability Exporter allows exporting time series, events, and audit logs to Splunk.
+    Citrix ADC Observability Exporter allows exporting time series ( events, and audit logs) to Splunk.
     Set this field to `yes` to allow exporting events.
     The default value is `no`.
 
@@ -104,7 +100,7 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
     In such cases, export to JSON endpoints like Splunk, ElasticSearch, and Zipkin over HTTP/HTTPS might become a bottleneck.
     The memory would keep growing uncontrollably until Citrix Observability Exporter terminates.
     To avoid such scenarios, rate-limiting can be configured for JSON based endpoints including Kafka. The impact on Kafka is low as Kafka is an efficient protocol.
-    Set this field to `yes` to enable rate-limiting for JSON based endpoints.
+    Set this field to `yes` to enable rate-limiting for JSON based end points.
     The default value is `no`.
 
 -  `transQueueLimit`:
@@ -118,7 +114,7 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
 
     Specifies the recalculation window in seconds and the value must be greater than zero.
     The lower the window size, the more effective is the rate-limiting, but specifying low values may cause slight CPU overhead.
-    The default value is 5 seconds.
+    The default value is five seconds.
 
 -  `AuthToken`:
 
@@ -128,8 +124,11 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
     Examples :
 
         SPLUNK
-            "AuthToken": "b45ca9ca-d31b-44be-ad58-1ce9bdeee09a"
+
+            "AuthToken": "xxxxxxxx-xxxx-xxxx-ad58-1ce9bdeee09a"
+        
         ELASTICSEARCH
+
             "AuthToken": "ZWxhc3RpYzpteXBhc3MxMjM="
 
 -  `Index`:
@@ -141,12 +140,13 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
 
     Specifies the index prefix used for ElasticSearch. ElasticSearch allows you to create indexes as necessary through its APIs.
     Kibana allows the creation of index patterns and to facilitate that, this field is used.
-    All index names follow this prefix followed by the time of creation of the index (the time or its format is decided by the `IndexInterval`).
+    All index names follow this prefix followed by the time of creation of the index. The time or time format is based on the `IndexInterval`.
 
 -  `IndexInterval`:
 
     The interval at which the ElasticSearch indexes are rotated, following the index pattern.
     You can configure the interval as one of the following values:
+
     -  hourly
     -  12 hours
     -  daily
@@ -177,10 +177,10 @@ Following are the guidelines while configuring the  `lstreamed_default.conf` fil
 -  Currently, you can only export time series like audit logs and events to Splunk, but in parallel to transactions and metrics.
 
 -  You must not configure multiple endpoints of the same type in the `lstreamd.conf` file for one Citrix ADC Observability Exporter. For example, it is not possible to configure two Splunk instances, or two Kafka instances, or two ElasticSearch instances, or one Splunk and one ElasticSearch, and so on.
-    For Zipkin, although you can configure it in parallel to Splunk and ElasticSearch, configuring multiple instances of Zipkin. For instance, it is not possible to have two Zipkin instances in parallel.
+    For Zipkin, although you can configure it in parallel to Splunk and ElasticSearch, you may not configure multiple instances of Zipkin. For example, it is not possible to have two Zipkin instances in parallel.
 
 -  You can ignore the fields that are marked as optional as some of them may have predefined default values.
 
--  The JSON parser used for `lstreamd.conf` is sensitive (also case-sensitive). Ensure that you do not have extra or missing commas, or anything that may make the JSON format improper.
+-  The JSON parser used for `lstreamd.conf` is extremely sensitive (also case-sensitive). Ensure that you do not have extra or missing commas, or anything that may make the JSON format invalid.
 
 -  Some of the parameters that are not listed in this document are internal and are not meant to be altered. They have predefined default values.
