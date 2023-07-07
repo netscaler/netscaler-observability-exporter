@@ -1,10 +1,10 @@
 # Description of configuration parameters
 
-This topic contains descriptions of the `lstreamed_default.conf` file parameters. The `lstreamed_default.conf` parameters are used for endpoint specific configurations.
+This topic contains descriptions of the `lstreamd_default.conf` file parameters. The `lstreamd_default.conf` parameters are used for endpoint specific configurations
 
 -  `ServerUrl`: Specifies the address of the server.
 
-    The protocol can be Kafka for Apache Kafka, HTTPs for Splunk and ElasticSearch, and HTTP for Zipkin.
+    The protocol can be Kafka for Apache Kafka, HTTP or HTTPs for Splunk and ElasticSearch, and HTTP for Zipkin.
 
     The following are examples of how to specify the server URL for different end points:
 
@@ -160,7 +160,7 @@ This topic contains descriptions of the `lstreamed_default.conf` file parameters
 
 ## Additional information
 
-Following are the guidelines while configuring the  `lstreamed_default.conf` file parameters.
+Following are the guidelines while configuring the  `lstreamd_default.conf` file parameters.
 
 -  Zipkin is supported in parallel to Splunk, ElasticSearch, or Kafka.
 
@@ -176,11 +176,11 @@ Following are the guidelines while configuring the  `lstreamed_default.conf` fil
 
 -  Currently, you can only export time series like audit logs and events to Splunk, but in parallel to transactions and metrics.
 
--  You must not configure multiple endpoints of the same type in the `lstreamd.conf` file for one Citrix ADC Observability Exporter. For example, it is not possible to configure two Splunk instances, or two Kafka instances, or two ElasticSearch instances, or one Splunk and one ElasticSearch, and so on.
+-  You must not configure multiple endpoints of the same type in the `lstreamd_default.conf` file for one Citrix ADC Observability Exporter. For example, it is not possible to configure two Splunk instances, or two Kafka instances, or two ElasticSearch instances, or one Splunk and one ElasticSearch, and so on.
     For Zipkin, although you can configure it in parallel to Splunk and ElasticSearch, you may not configure multiple instances of Zipkin. For example, it is not possible to have two Zipkin instances in parallel.
 
 -  You can ignore the fields that are marked as optional as some of them may have predefined default values.
 
--  The JSON parser used for `lstreamd.conf` is extremely sensitive (also case-sensitive). Ensure that you do not have extra or missing commas, or anything that may make the JSON format invalid.
+-  The JSON parser used for `lstreamd_default.conf` is extremely sensitive (also case-sensitive). Ensure that you do not have extra or missing commas, or anything that may make the JSON format invalid.
 
--  Some of the `lstreamed_default.conf` file parameters are not listed in this document. Those parameters that are not listed are internal and are not meant to be altered. They have predefined default values.
+-  Some of the `lstreamd_default.conf` file parameters are not listed in this document. Those parameters that are not listed are internal and are not meant to be altered. They have predefined default values.
