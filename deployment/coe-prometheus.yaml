@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: coe-prometheus
-          image: "quay.io/citrix/citrix-observability-exporter:1.6.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
           imagePullPolicy: Always
           securityContext:
             privileged: true
@@ -45,6 +45,9 @@ spec:
               subPath: lstreamd_default.conf
             - name: core-data
               mountPath: /var/crash/
+          env:
+            - name: COE_LOG_STD_OUT
+              value: "3"
       volumes:
         - name: lstreamd-config-prometheus
           configMap:
