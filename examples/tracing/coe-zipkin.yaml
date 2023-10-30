@@ -60,8 +60,8 @@ spec:
             - name: core-data
               mountPath: /var/crash/
           env:
-            - name: COE_LOG_STD_OUT
-              value: "3"
+            - name: NOE_LOG_LEVEL
+              value: "INFO"
       volumes:
         - name: lstreamd-config-zipkin
           configMap:
