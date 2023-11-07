@@ -58,7 +58,7 @@ spec:
       containers:
         - name: coe-es
           image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
-          imagePullPolicy: Always
+          imagePullPolicy: Never
           ports:
             - containerPort: 5557
               name: lstream
@@ -69,7 +69,7 @@ spec:
             - name: core-data
               mountPath: /var/crash/
           env:
-            - name: NOE_LOG_LEVEL
+            - name: NSOE_LOG_LEVEL
               value: "INFO"
       volumes:
         - name: lstreamd-config-es
