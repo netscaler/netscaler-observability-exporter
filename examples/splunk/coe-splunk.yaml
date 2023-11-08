@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
         - name: coe-splunk
-          image: "quay.io/citrix/citrix-observability-exporter:1.6.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
@@ -74,10 +74,17 @@ spec:
             - name: lstreamd-config-splunk
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
               subPath: lstreamd_default.conf
+            - name: core-data
+              mountPath: /var/crash/
+          env:
+            - name: NSOE_LOG_LEVEL
+              value: "INFO"
       volumes:
         - name: lstreamd-config-splunk
           configMap:
             name: coe-config-splunk
+        - name: core-data
+          emptyDir: {}
 ---
 # Citrix-observability-exporter headless service  
 apiVersion: v1
