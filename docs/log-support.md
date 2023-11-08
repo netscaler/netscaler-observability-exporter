@@ -9,7 +9,7 @@ The following logging severity levels are supported and the default value is `IN
 -  `ERROR`:  Only fatal messages and error messages are logged.
 -  `INFO`:  Only fatal, error, and informational messages are logged.
 
-For Kubernetes YAML based deployments the default value is NONE. But, for Helm and OpenShift operator deployments of NetScaler Observability Exporter logging is enabled by default and set as INFO.
+For Kubernetes YAML based deployments the default value is `NONE`. But, for Helm and OpenShift operator deployments of NetScaler Observability Exporter logging is enabled by default and set as `INFO`.
 
 You can configure logging using the environment variable `NSOE_LOG_LEVEL` while deploying NetScaler Observability Exporter for each endpoint.
 
