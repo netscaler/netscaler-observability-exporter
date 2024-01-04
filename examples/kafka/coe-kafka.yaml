@@ -73,6 +73,8 @@ spec:
           ports:
             - containerPort: 5557
               name: lstream
+            - containerPort: 5563
+              name: rest
           volumeMounts:
             - name: lstreamd-config-kafka
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
@@ -101,6 +103,10 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
   selector:
       app: coe-kafka
 ---
@@ -116,5 +122,9 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
   selector: 
       app: coe-kafka
