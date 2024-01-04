@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: coe-zipkin
-          image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.9.001"
           imagePullPolicy: Always
           securityContext:
             privileged: true

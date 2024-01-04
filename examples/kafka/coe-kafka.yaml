@@ -24,6 +24,10 @@ data:
                 "SLA": "none",
                 "MONGO": "none"
             },
+            "TimeSeries": {
+                "EVENTS": "no",
+                "AUDITLOGS": "no"
+            },
             "ProcessAlways": "yes",
             "FileSizeMax": "40",
             "ProcessYieldTimeOut": "500",
@@ -64,7 +68,7 @@ spec:
             - "kafka-node3"
       containers:
         - name: coe-kafka
-          image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.9.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
