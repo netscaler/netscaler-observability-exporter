@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
         - name: coe-es
-          image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.9.001"
           imagePullPolicy: Never
           ports:
             - containerPort: 5557

@@ -24,6 +24,10 @@ data:
                 "SLA": "none",
                 "MONGO": "none"
             },
+            "TimeSeries": {
+                "EVENTS": "no",
+                "AUDITLOGS": "no"
+            },
             "ProcessAlways": "yes",
             "FileSizeMax": "40",
             "ProcessYieldTimeOut": "500",
@@ -64,11 +68,13 @@ spec:
             - "kafka-node3"
       containers:
         - name: coe-kafka
-          image: "quay.io/citrix/citrix-observability-exporter:1.8.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.9.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
               name: lstream
+            - containerPort: 5563
+              name: rest
           volumeMounts:
             - name: lstreamd-config-kafka
               mountPath: /var/logproxy/lstreamd/conf/lstreamd_default.conf
@@ -97,6 +103,10 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
   selector:
       app: coe-kafka
 ---
@@ -112,5 +122,9 @@ spec:
   ports:
     - port: 5557
       protocol: TCP
+      name: lstreamd
+    - port: 5563
+      protocol: TCP
+      name: rest
   selector: 
       app: coe-kafka
