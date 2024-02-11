@@ -77,15 +77,19 @@ This topic contains descriptions of the `lstreamd_default.conf` file parameters.
 
 -  `EVENTS`:
 
-    Citrix ADC Observability Exporter allows exporting time series ( events, and audit logs) to Splunk.
+    Citrix ADC Observability Exporter allows exporting time series (events, and audit logs) to Splunk and Kafka.
     Set this field to `yes` to allow exporting events.
     The default value is `no`.
 
 -  `AUDITLOGS`:
 
-    You can export audit logs to Splunk.
+    You can export audit logs to Splunk and Kafka.
     Set this field to `yes` to allow exporting audit logs.
     The default value is `no`.
+
+-  `ConnectionPoolSize`:
+
+    Alters the size of connection pools for Splunk.`ConnectionPoolSize` and `MaxConnections` can be used to control the rate at which data is exported (to the endpoint).
 
 -  `ElkMaxSendBuffersPerSec`:
 
@@ -174,7 +178,7 @@ Following are the guidelines while configuring the  `lstreamd_default.conf` file
 
     Prometheus is always `ON` and metrics can be exported to it in parallel to transactions, audit logs, and events.
 
--  Currently, you can only export time series like audit logs and events to Splunk, but in parallel to transactions and metrics.
+-  Currently, you can only export time series like audit logs and events to Splunk and Kafka, but in parallel to transactions and metrics.
 
 -  You must not configure multiple endpoints of the same type in the `lstreamd_default.conf` file for one Citrix ADC Observability Exporter. For example, it is not possible to configure two Splunk instances, or two Kafka instances, or two ElasticSearch instances, or one Splunk and one ElasticSearch, and so on.
     For Zipkin, although you can configure it in parallel to Splunk and ElasticSearch, you may not configure multiple instances of Zipkin. For example, it is not possible to have two Zipkin instances in parallel.

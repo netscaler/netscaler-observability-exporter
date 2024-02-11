@@ -315,6 +315,10 @@ The following example shows the YAML file with the data format configured as JSO
                     "SLA": "none",
                     "MONGO": "none"
                 }
+                "TimeSeries": {
+                    "EVENTS": "yes",
+                    "AUDITLOGS": "yes"
+                }
               }
           }
         }
