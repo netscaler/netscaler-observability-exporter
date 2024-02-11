@@ -44,9 +44,9 @@ You can view the traces using the Zipkin user interface. However, you can also e
 
 When Elasticsearch is specified as the transaction endpoint, Citrix ADC Observability Exporter converts the data to JSON format. On the Elasticsearch server, Citrix ADC Observability Exporter creates Elasticsearch indexes for each ADC on an hourly basis. These indexes are based on data, hour, UUID of the ADC, and the type of HTTP data (http_event or http_error). Then, Citrix ADC Observability Exporter uploads the data in JSON format under Elastic search indexes for each ADC. All regular transactions are placed into the http_event index and any anomalies are placed into the http_error index.  
 
-### Citrix ADC Observability Exporter with Kafka as the transaction endpoint
+### Citrix ADC Observability Exporter with Kafka as the endpoint
 
-When Kafka is specified as the transaction endpoint, Citrix ADC Observability Exporter converts the transaction data to [Avro](http://avro.apache.org/docs/current/Avro) format and streams them to Kafka.
+NetScaler Observability Exporter exports transactions to Kafka as [Avro](http://avro.apache.org/docs/current/Avro) or JSON. Auditlogs and events are exported as JSON.
 
 ### Citrix ADC Observability Exporter with Prometheus as the endpoint for time series data
 
