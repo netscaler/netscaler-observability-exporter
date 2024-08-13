@@ -1,9 +1,8 @@
 # Deploy Citrix ADC Observability Exporter
 
 This topic provides information on how to deploy Citrix ADC Observability Exporter using Kubernetes YAML files.
-<!---
-You can deploy Citrix Observability Exporter using Kubernetes YAML files or using Helm charts. You can also deploy {{page.adc-observability-exporter-short}} using NetScaler Operator. For information on the steps to deploy, see [Deploy NetScaler Observability Exporter using NetScaler Operator](https://docs.netscaler.com/en-us/netscaler-k8s-ingress-controller/deploy/nsoe-openshift-operator). 
--->
+
+You can deploy Citrix Observability Exporter using Kubernetes YAML files or using Helm charts. You can also deploy Citrix Observability Exporter using NetScaler Operator. For information on the steps to deploy, see [Deploy NetScaler Observability Exporter using NetScaler Operator](https://docs.netscaler.com/en-us/netscaler-k8s-ingress-controller/deploy/nsoe-openshift-operator). 
 
 Based on your Citrix ADC deployment, you can use Citrix ADC Observability Exporter to export metrics and transactions from Citrix ADC CPX, MPX, or VPX.
 
