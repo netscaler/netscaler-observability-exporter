@@ -74,7 +74,7 @@ To edit the YAML file for the required changes, perform the following steps:
 
 1.  Edit the ConfigMap using the following YAML definition: 
   
-    **Note**: Ensure that you specify the Kafka broker IP and the Kafka desired topic.
+    **Note**: Ensure that you specify the list of Kafka broker IP address seperated by comma and the Kafka desired topic.
 
 ```yml
     apiVersion: v1
