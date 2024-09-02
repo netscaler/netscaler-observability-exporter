@@ -86,7 +86,7 @@ To edit the YAML file for the required changes, perform the following steps:
         {
             "Endpoints": {
               "KAFKA": {
-                "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
+                "ServerUrl": "X.X.X.X:9092,Y.Y.Y.Y:9092", #Specify the Kafka broker IP
                 "KafkaTopic": "HTTP", #Specify the desired kafka topic
                 "DataFormat": "AVRO",
                 "RecordType": {
