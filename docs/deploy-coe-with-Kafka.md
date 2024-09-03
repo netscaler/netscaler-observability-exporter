@@ -74,7 +74,7 @@ To edit the YAML file for the required changes, perform the following steps:
 
 1.  Edit the ConfigMap using the following YAML definition: 
   
-    **Note**: Ensure that you specify the Kafka broker IP and the Kafka desired topic.
+    **Note**: Ensure that you specify the bootstrap Kafka broker addresses (separated by comma) and the desired Kafka topic.
 
 ```yml
     apiVersion: v1
@@ -86,7 +86,7 @@ To edit the YAML file for the required changes, perform the following steps:
         {
             "Endpoints": {
               "KAFKA": {
-                "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
+                "ServerUrl": "X.X.X.X:9092,Y.Y.Y.Y:9092", #Specify the bootstrap Kafka broker addresses (separated by comma in case multiple bootstrap brokers are to be configured)
                 "KafkaTopic": "HTTP", #Specify the desired kafka topic
                 "DataFormat": "AVRO",
                 "RecordType": {
@@ -299,7 +299,7 @@ The following example shows the YAML file with the data format configured as JSO
             "Endpoints": {
               "KAFKA": {
                 "DataFormat": "JSON",
-                "ServerUrl": "X.X.X.X:9092", #Specify the Kafka broker IP
+                "ServerUrl": "X.X.X.X:9092,Y.Y.Y.Y:9092", #Specify the bootstrap Kafka broker addresses (separated by comma in case multiple bootstrap brokers are to be configured)
                 "KafkaTopic": "HTTP", #Specify the desired kafka topic
                 "RecordType": {
                     "HTTP": "all",
