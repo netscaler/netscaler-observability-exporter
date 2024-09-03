@@ -7,7 +7,7 @@ data:
     { 
         "Endpoints": {
           "KAFKA": {
-            "ServerUrl": "X.X.X.X:9092",
+            "ServerUrl": "X.X.X.X:9092,Y.Y.Y.Y:9092",
             "KafkaTopic": "HTTP",
             "DataFormat": "AVRO",
             "RecordType": {
@@ -68,7 +68,7 @@ spec:
             - "kafka-node3"
       containers:
         - name: coe-kafka
-          image: "quay.io/citrix/citrix-observability-exporter:1.9.001"
+          image: "quay.io/citrix/citrix-observability-exporter:1.10.001"
           imagePullPolicy: Always
           ports:
             - containerPort: 5557
